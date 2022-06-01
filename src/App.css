@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
 
+
+/* Vista de usuario, hecha por Chon, luego hay que juntarlas */
 *{
   padding: 0;
   margin: 0;
@@ -10,6 +12,7 @@
 .logo-container{
   height: 100%;
 }
+
 .logo{
   height: 100%;
 }
@@ -18,8 +21,11 @@
   height: 80px;
   background-color: black;
   padding: 0px 90px 0px 90px;
-  font-family: 'Open Sans', sans-serif;
-  
+  font-family: 'Open Sans', sans-serif;  
+}
+
+.navbar-title {
+  color: white;
 }
 
 .navbar-container{
@@ -27,7 +33,6 @@
   height: 100%;
   align-items: center;
   justify-content: space-between;
-
 }
 
 .navbar-links{
@@ -38,7 +43,6 @@
   align-items: center;;
 }
 
-
 .navbar-link{
   color: white;
   text-decoration: none;
@@ -48,14 +52,14 @@
   justify-content: center;
   align-items: center;
   transition: all 0.3s ease-in;
-  font-weight: 700;
-  
+  font-weight: 700;  
 }
 
 .navbar-link:hover{
   color: red;
 }
-i{
+
+i {
   cursor: pointer;
 }
 
@@ -74,6 +78,7 @@ i:hover{
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+
   height: 100%;
   width: 100%;
   padding: 70px 0px 0px 85px;
@@ -90,4 +95,125 @@ i:hover{
   font-size: 20px;
   padding: 0px .5rem 0px .5rem;
   font-weight: 600;
+}
+
+/* Vista de admin hecha por Pedro, hay que juntar ambas */
+/* Custom main content */
+.main-admin {
+  display: flex;
+  justify-content: center;
+}
+
+/* Custom Navbar */
+.logo-title {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+.navbar-title {
+  padding: 0 4rem;
+}
+
+/* Display of items for stock page */
+.item-display {
+  display: flex;
+  background-color: #d3d3d3;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+
+  margin: 2rem;
+  background-color: white;
+}
+
+.card-image {
+  height: 16rem;
+  width: 20rem;
+
+  background: url("./images/card-sushi-1.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
+  content: "";
+}
+
+.card-body {
+  display: flex;
+  padding: 1rem 0;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  margin: 0 1rem;
+}
+
+/* Switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+
+  margin: 0 1rem;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
