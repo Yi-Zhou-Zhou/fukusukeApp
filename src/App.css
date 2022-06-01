@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
 
-
-/* Vista de usuario, hecha por Chon, luego hay que juntarlas */
 *{
   padding: 0;
   margin: 0;
@@ -12,7 +10,6 @@
 .logo-container{
   height: 100%;
 }
-
 .logo{
   height: 100%;
 }
@@ -21,11 +18,8 @@
   height: 80px;
   background-color: black;
   padding: 0px 90px 0px 90px;
-  font-family: 'Open Sans', sans-serif;  
-}
-
-.navbar-title {
-  color: white;
+  font-family: 'Open Sans', sans-serif;
+  
 }
 
 .navbar-container{
@@ -33,6 +27,7 @@
   height: 100%;
   align-items: center;
   justify-content: space-between;
+
 }
 
 .navbar-links{
@@ -43,6 +38,7 @@
   align-items: center;;
 }
 
+
 .navbar-link{
   color: white;
   text-decoration: none;
@@ -52,14 +48,14 @@
   justify-content: center;
   align-items: center;
   transition: all 0.3s ease-in;
-  font-weight: 700;  
+  font-weight: 700;
+  
 }
 
 .navbar-link:hover{
   color: red;
 }
-
-i {
+i{
   cursor: pointer;
 }
 
@@ -68,17 +64,16 @@ i:hover{
 }
 
 .main-content{
-  height: 700px;
+  height: 850px;
   width: 100%;
   color: white;
 }
 
 .bg-container{
-  background: url("./images/mahmoud-fawzy-EqoCUzG9200-unsplash.jpg");
+  background: url('./images/mahmoud-fawzy-CIlzXVlYQJQ-unsplash.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-
   height: 100%;
   width: 100%;
   padding: 70px 0px 0px 85px;
@@ -95,6 +90,109 @@ i:hover{
   font-size: 20px;
   padding: 0px .5rem 0px .5rem;
   font-weight: 600;
+}
+
+/*   
+  Login Modal
+*/
+
+.form{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.form-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.input-field{
+  position:relative;
+  margin-bottom: 3rem;
+  width: 100%;
+}
+
+.form-input{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3rem;
+  border-radius: 5px;
+  padding: 1rem;
+  background: none;
+  z-index: 1;
+  border: 0.5px solid gray;
+}
+
+.form-label{
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  padding: 0 .25rem;
+  background-color: #fff;
+  color: rgb(181, 181, 181);
+  transition: .3s;
+}
+
+
+.form-button{
+  height: 3rem;
+  background-color: #FF0000;
+  color: rgb(255, 255, 255);
+  border-radius: 15px;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.modal-tools{
+  display: flex;
+  justify-content: space-between;
+}
+
+.checkbox{
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.recuperar-pass{
+  display: flex;
+  flex-direction: column;
+  text-align: justify;
+}
+
+.form-input:focus + .form-label{
+  top: -.5rem;
+  left: .8rem;
+  font-weight: 500;
+  z-index: 10;
+  color: #1A73E8;
+}
+
+.form-input:not(:placeholder-shown).form-input:not(:focus)+ .form-label{
+  top: -.5rem;
+  left: .8rem;
+  font-weight: 500;
+  z-index: 10;
+}
+
+.modal-p{
+  display: inline;
+}
+
+.modal-p:nth-child(2){
+  font-weight: 600;
+  border-bottom: 2px solid black;
+  cursor: pointer;
+
+
+}
+
+.modal-forgot{
+  cursor: pointer;
 }
 
 /* Vista de admin hecha por Pedro, hay que juntar ambas */
