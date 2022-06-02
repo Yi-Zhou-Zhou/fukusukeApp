@@ -453,15 +453,11 @@ input:checked + .slider:before {
   transition: 0.2s linear;
   font-size: 20px;
   cursor: pointer;
-
-
 }
 
 .sidebar-menu .menu .menu-item.is-active{
   color: rgb(235, 29, 29);
   border-right: 5px solid rgb(235, 29, 29) ;
-  
-
 }
 
 
@@ -486,8 +482,8 @@ li{
   }
 
   .sidebar-menu{
-    position: absolute;
-    top: 80px;
+    position: fixed;
+    top: 0;
     left: -300px;
     height: 100%;
     width: 100%;
