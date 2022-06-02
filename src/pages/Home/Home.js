@@ -143,13 +143,15 @@ const Home = () => {
           <a href='#' className='navbar-link'><BiFoodMenu/>Carta</a>
           <a href='#' className='navbar-link'><RiTeamLine/>Nosotros</a>
           <a href='#' className='navbar-link'><GoLocation/>Contacto</a>
-          <i onClick={() => {setOpenedSignIn(true)}}><AiOutlineLogin size={35} color="white" /></i>
+          <i onClick={() => {setOpenedSignIn(true)} } className='navbar-icon'><AiOutlineLogin size={35} color="white" /></i>
         </div>
       </div>
     </nav>
 
     <main className='main-content'>
       <div className='bg-container'>
+        <h3 className='hero-title'>Atrévete a probar el mejor Sushi de Santiago...</h3>
+        <button className='hero-btn'>Realizar Pedido</button>
       </div>
     </main>
 

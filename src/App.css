@@ -12,7 +12,7 @@
 */
 
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
 
 .logo-container{
   height: 100%;
@@ -25,7 +25,7 @@
   height: 80px;
   background-color: black;
   padding: 0px 90px 0px 90px;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Special Elite', cursive;
   
 }
 
@@ -42,14 +42,39 @@
   justify-content: space-evenly;
   width: 60%;
   height: 0%;
-  align-items: center;;
+  align-items: center;
 }
 
+@media screen and (max-width: 1024px){
+  .navbar-links{
+    width: 80%;;
+  }
+}
 
+@media screen and (max-width: 768px){
+  .navbar-links{
+    position: fixed;
+    top: calc(100vh - 40px);
+    font-size: 16px !important;
+    display: flex;
+    z-index: 999;
+    justify-content: space-evenly;
+    width: 100%;
+  }
+  .navbar-icon{
+    position: fixed;
+    top: 1.8rem;
+    right: 1.5rem;
+  }
+
+
+
+
+}
 .navbar-link{
   color: white;
   text-decoration: none;
-  font-size: 19px;
+  font-size: 22px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -70,6 +95,9 @@ i:hover{
   color: red;
 }
 
+/* 
+Main content 
+*/
 .main-content{
   height: 850px;
   width: 100%;
@@ -77,19 +105,24 @@ i:hover{
 }
 
 .bg-container{
-  background: url('./images/mahmoud-fawzy-CIlzXVlYQJQ-unsplash.jpg');
+  background: url('./images/photo-1617196034183-421b4917c92d.avif');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
   height: 100%;
   width: 100%;
-  padding: 70px 0px 0px 85px;
+  padding: 70px 0px 0px 180px;
+
+  font-family: 'Open Sans', sans-serif;
+  ;
 }
 
 .hero-btn{
-  height: 3rem;
-  width: 12rem;
-  background-color: red;
+  height: 4rem;
+  width: 15rem;
+  background-color: rgb(249, 19, 19);
+  opacity: 0.8;
+  cursor: pointer;
   color: white;
   border: none;
   border-radius: 5px;
@@ -97,7 +130,10 @@ i:hover{
   font-size: 20px;
   padding: 0px .5rem 0px .5rem;
   font-weight: 600;
+  margin-top: 1rem;
+  font-family: 'Special Elite', cursive;
 }
+
 
 .menu-toggle{
   display: none;
@@ -109,6 +145,38 @@ i:hover{
   border-radius: 99px;
   cursor: pointer;
   color: white;
+}
+
+.hero-title{
+  font-size: 55px;
+  font-weight: 800;
+  
+  margin-top: 2rem;
+  max-width: 60%;
+  letter-spacing:2px;
+  font-family: 'Special Elite', cursive;
+  
+}
+
+
+@media screen and (max-width: 1300px){
+  .bg-container{
+    padding-left: 60px;
+    padding-right: 40px;
+  }
+
+  .hero-title{
+    max-width: 80%;
+  }
+}
+@media screen and (max-width: 769px){
+  .hero-title{
+    max-width: 100%;
+  }
+  .hero-btn{
+    margin: 2rem 0 0 3rem;
+  }
+
 }
 
 /*   
@@ -214,6 +282,9 @@ i:hover{
   cursor: pointer;
 }
 
+@media screen and (max-width: 1024px){
+
+}
 /* Vista de admin hecha por Pedro, hay que juntar ambas */
 /* Custom main content */
 .main-admin {
