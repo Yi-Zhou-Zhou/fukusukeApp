@@ -1,30 +1,70 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import imgLogo from "../../images/logo.png"
-import {AiOutlineLogin} from "react-icons/ai"
+import {AiOutlineConsoleSql, AiOutlineLogin} from "react-icons/ai"
 import {BiFoodMenu} from "react-icons/bi"
 import {RiTeamLine} from "react-icons/ri"
 import {GoLocation} from "react-icons/go"
 import { Modal} from '@mantine/core';
+import pdf from "../../pdf/Carta.pdf"
+import axios from 'axios';
+import { Link } from 'react-router-dom'
+import { useNavigate} from 'react-router-dom'
 
 const Home = () => {
+  const navigate = useNavigate();
   const [openedSignUp, setOpenedSignUp] = useState(false);
   const [openedSignIn, setOpenedSignIn] = useState(false);
+  const [error, setError] = useState('')
   const [credentials, setCredentials] = useState({
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    phone: "",
   })
+  async function registerUser(e){
+    e.preventDefault()
+    const email = credentials.email
+    const password = credentials.password
+    const phoneNumber = credentials.phone
+    const userAccount = "user"
+    const name = 'testUser'
+    const newUser = {
+      email: email,
+      password: password,
+      name: name,
+      role: userAccount,
+      action: "register", 
+    }
+    axios.post('http://localhost:8080/', newUser)
+  }
   const handleChange  = (e) => {
     setCredentials({...credentials, [e.target.name]: e.target.value}) 
   }
-  const handleRegister = async (e) => {
-    e.preventDefault()
-
-  }
   const handleLogin  = async (e) => {
     e.preventDefault()
-    
+    const email = credentials.email
+    const password = credentials.password
+    const loginUser = {
+      email: email,
+      password: password,
+      action: "login",
+    }
+    try {
+      const {data} = await axios.post("http://localhost:8080/", loginUser)
+      const userType = data.user.role;
+      console.log(data)
+      if (userType === 'user') navigate('/user')
+      else if(userType === 'admin') navigate('/admin')
+
+    } catch (error) {
+      console.log(error.response.data.err.message)
+    }
   }
+
+  useEffect(() => {
+    axios.get('http://localhost:8080/').then((response) => {
+    })
+  }, [])
   return (
     <>
     <Modal
@@ -43,14 +83,14 @@ const Home = () => {
       >
           <form className='form'>
             <div className='input-field'>
-              <input type="text" class="form-input" placeholder=" "/>
+              <input type="text" class="form-input" placeholder=" " name="email" onChange={handleChange}/>
               <label for="" class="form-label">Correo electrónico</label>
             </div>
             <div class="input-field">
-              <input type="password" class="form-input" placeholder=" "/>
+              <input type="password" class="form-input" placeholder=" " name="password" onChange={handleChange}/>
               <label for="" class="form-label">Contraseña</label>
               </div>
-            <button class="form-button">Ingresar</button>
+            <button class="form-button" onClick={handleLogin}>Ingresar</button>
 
             <div className='modal-tools'>
               <div className='checkbox'>
@@ -93,23 +133,23 @@ const Home = () => {
       >
           <form className='form'>
             <div className='input-field'>
-              <input type="text" class="form-input" placeholder=" "/>
+              <input type="text" class="form-input" placeholder=" " name='email' onChange={handleChange}/>
               <label for="" class="form-label">Correo electrónico *</label>
             </div>
             <div class="input-field">
-              <input type="password" class="form-input" placeholder=" "/>
+              <input type="password" class="form-input" placeholder=" " name='password' onChange={handleChange}/>
               <label for="" class="form-label">Contraseña *</label>
             </div>
             <div class="input-field">
-              <input type="password" class="form-input" placeholder=" "/>
+              <input type="password" class="form-input" placeholder=" " name='confirmPassword' onChange={handleChange}/>
               <label for="" class="form-label">Confirmar Contraseña *</label>
             </div>
 
             <div class="input-field">
-              <input type="password" class="form-input" placeholder=" "/>
+              <input type="number" class="form-input" placeholder=" " name="phone" onChange={handleChange}/>
               <label for="" class="form-label">Celular *</label>
             </div>
-            <button class="form-button">Crear Cuenta</button>
+            <button class="form-button" onClick={registerUser}>Crear Cuenta</button>
 
             <div className='modal-tools'>
               <div className='checkbox'>
@@ -140,7 +180,7 @@ const Home = () => {
           <img className='logo' src={imgLogo} alt='fukusuke'/>
         </div>
         <div className='navbar-links'>
-          <a href='#' className='navbar-link'><BiFoodMenu/>Carta</a>
+          <a href={pdf} target = "_blank" className='navbar-link'><BiFoodMenu/>Carta</a>
           <a href='#' className='navbar-link'><RiTeamLine/>Nosotros</a>
           <a href='#' className='navbar-link'><GoLocation/>Contacto</a>
           <i onClick={() => {setOpenedSignIn(true)} } className='navbar-icon'><AiOutlineLogin size={35} color="white" /></i>
