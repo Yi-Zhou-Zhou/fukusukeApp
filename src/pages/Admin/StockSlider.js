@@ -1,21 +1,26 @@
 import React, { useState } from 'react'
 
-const StockSlider = ({ stockStatus }) => {
-    const [checkedState, setCheckedState] = useState(stockStatus)
+import { Switch } from '@mantine/core'
+
+const StockSlider = ({ stockState }) => {
+    const [switchState, setSwitchState] = useState( stockState )
 
     const handleStockChange = () => {
-        if (checkedState === "") {
-            setCheckedState("checked")
+        if (switchState === 0) {
+            setSwitchState(1)
         } else {
-            setCheckedState("")
+            setSwitchState(0)
         }
     }
 
     return(
-        <label class="switch">
-            <input type="checkbox" checked={ checkedState } onClick={handleStockChange}/>
-            <span class="slider round"></span>
-        </label>
+        <Switch
+            label = "stock"
+            color = "red"
+            size = "md"
+            checked = { switchState }
+            onChange = { handleStockChange }
+        />
     )
 }
 
