@@ -381,15 +381,8 @@ Main content
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-start;
-  background-color: #d3d3d3;
 
   height: 100%;
-}
-
-.admin-page{
-  display: flex;
-  /* ARREGLAR */
-  min-height: 100vh;
 }
 
 /*  Sidebar */
@@ -421,10 +414,6 @@ Main content
 
 .sidebar-menu .menu .menu-item:hover{
   color: rgb(235, 29, 29);
-}
-
-li{
-  list-style: none;
 }
 
 @media screen and (max-width: 1024px){
@@ -470,11 +459,4 @@ li{
   .item-display{
     justify-content: center;
   }
-}
-
-.delete-icon {
-  font-size: 2rem;
-  position: absolute;
-  left: 0;
-  bottom: 0;
 }

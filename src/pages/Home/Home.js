@@ -14,17 +14,20 @@ const Home = () => {
     password: '',
     confirmPassword: ''
   })
+
   const handleChange  = (e) => {
     setCredentials({...credentials, [e.target.name]: e.target.value}) 
   }
+
   const handleRegister = async (e) => {
     e.preventDefault()
-
   }
+
   const handleLogin  = async (e) => {
     e.preventDefault()
     
   }
+
   return (
     <>
     <Modal
@@ -150,7 +153,7 @@ const Home = () => {
 
     <main className='main-content'>
       <div className='bg-container'>
-        <h3 className='hero-title'>Atrévete a probar el mejor Sushi de Santiago...</h3>
+        <h3 className='hero-title' >Atrévete a probar el mejor Sushi de Santiago...</h3>
         <button className='hero-btn'>Realizar Pedido</button>
       </div>
     </main>

@@ -2,18 +2,11 @@ import React from 'react'
 
 import StockSlider from './StockSlider'
 
-import { Button, Card, Group, Image, Text, useMantineTheme } from '@mantine/core';
+import { Button, Card, Group, Image, Text } from '@mantine/core';
 import {AiFillCloseCircle} from 'react-icons/ai'
 import styled from 'styled-components'
 
-// Retorna un entero separado por puntos en grupos de a 3
-// @param { int } price: El número a separar
-// @return { string } price separado por puntos
-const stringifyPrice = (price) => {
-    return(
-        price.toString().match(/(\d+?)(?=(\d{3})+(?!\d)|$)/g).join(".")        
-    )
-}
+import stringifyPrice from '../../functions/common/stringifyPrice';
 
 // "styled-component" para un botón que borra tarjetas
 const DeleteButton = styled.button`
@@ -36,7 +29,7 @@ const DeleteButton = styled.button`
         top: 6px;
         right: 6px;
         width: 1rem;
-        height: 1rem;
+        height: 1.3rem;
 
         background-color: white;
         content: "";
@@ -49,25 +42,30 @@ const StyledDeleteIcon = styled(AiFillCloseCircle)`
     font-size: 2rem;
 `
 
-// Componente 
+// "styled-component" para el contenedor de la Card
+const CardContainer = styled.div`
+    margin: 1rem;
+    position: relative;
+
+    width: 19.25rem;
+`
+
+// "styled-component" para grupos dentro de Cards
+const CardGroup = ({ className, children }) => {
+    return(
+        <Group className = { className } position='apart' align = 'center'>
+            { children }
+        </Group>
+    )
+}
+
+const StyledCardGroup = styled(CardGroup)`
+    margin: 1rem 0;
+`
+
 const ItemCard = ({ menu }) => {
-    const theme = useMantineTheme();
-
-    const containerStyles = {
-        margin: '1rem',
-        position: 'relative'
-    }
-
-    const groupStyles = {
-        marginTop: '1rem',
-    }
-
-    const buttonStyles = {
-        margin: "0 8rem 0 0",
-    }
-
     return (
-        <div style = {containerStyles}>
+        <CardContainer>
             <DeleteButton>
                 <StyledDeleteIcon />
             </DeleteButton>
@@ -77,7 +75,7 @@ const ItemCard = ({ menu }) => {
                     <Image src = { menu.picture } alt = "Fotografía de sushi" height={160}/>
                 </Card.Section>
 
-                <Group position='apart' style = { groupStyles }>
+                <StyledCardGroup>
                     <Text weight = { 600 } >
                         { menu.name }
                     </Text>
@@ -85,17 +83,18 @@ const ItemCard = ({ menu }) => {
                     <Text weight = { 100 } >
                         { stringifyPrice(menu.price) }
                     </Text>
-                </Group>
+                </StyledCardGroup>
 
-                <Group position = 'apart' align = 'center' style = { groupStyles }>
-                    <Button variant="light" color="blue" style = { buttonStyles }>
+                <StyledCardGroup>
+                    <Button variant="light" color="blue">
                         Editar
                     </Button>
 
                     <StockSlider stockState = { menu.stock }/>
-                </Group>
+                </StyledCardGroup>
+
             </Card>
-        </div>
+        </CardContainer>
     )
 }
 
