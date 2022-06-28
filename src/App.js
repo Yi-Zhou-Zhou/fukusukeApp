@@ -15,6 +15,8 @@ import AdminHome from './pages/Admin/AdminHome'
 import Greeting from './pages/Admin/Greeting'
 import Orders from './pages/Admin/Orders';
 import Stock from './pages/Admin/Stock';
+import User from './pages/User/User';
+
 
 const App = ({ menus, orders, users }) => {
     return (
