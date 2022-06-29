@@ -75,15 +75,32 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
             element.setCustomValidity("Las contraseñas no coinciden");
             return;
         }
+        // register user
         console.log(credentials);
-        // const newUser = {
-        //     email: email,
-        //     password: password,
-        //     name: name,
-        //     role: userAccount,
-        //     action: "register",
-        // };
-        // axios.post("http://localhost:8080/", newUser);
+        try {
+            const { data } = await axios.post(
+                "http://localhost:8080/register",
+                {
+                    ...credentials,
+                    password: password,
+                    role: "client",
+                }
+            );
+            console.log(data);
+            // setOpenedSignUp(false);
+            // setOpenedSignIn(true);
+        } catch (error) {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                console.log(error.response.data.message);
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.log(error.request);
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.log("Error", error.message);
+            }
+        }
     }
 
     return (
