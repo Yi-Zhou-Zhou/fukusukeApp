@@ -20,7 +20,7 @@ function Login({ openedSignIn, setOpenedSignIn, setOpenedSignUp }) {
         };
         try {
             const { data } = await axios.post(
-                "http://localhost:8080/",
+                "http://localhost:8080/login",
                 loginUser
             );
             const userType = data.user.role;
