@@ -39,7 +39,7 @@ const Orders = ({ menus, orders, users }) => {
         <Grid columns = { 20 } style = {{ padding: '0rem 2rem' }}>
             <Grid.Col span = { 8 }>
                 <Group direction = 'column'>
-                    {
+                    {   
                         orders.map(order =>
                             <Order key = { order.id } menus = { menus } order = { order } handleSelectOrder = {handleSelectOrder}/>
                         )
