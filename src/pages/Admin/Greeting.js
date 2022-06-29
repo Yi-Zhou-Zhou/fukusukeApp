@@ -10,14 +10,13 @@ const Greeting = ({ orders }) => {
             <Group>
             {
                 orders.map(order => 
-                    <Card> 
+                    <Card key = { order.id }> 
                         <Text>
                             {order.id}
                         </Text>
                     </Card>
                 )
             }
-                { console.log(orders) }
             </Group>
 
             <Title order = { 2 } > Productos sin stock: </Title> 

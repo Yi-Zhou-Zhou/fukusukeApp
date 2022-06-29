@@ -63,10 +63,16 @@ const StyledCardGroup = styled(CardGroup)`
     margin: 1rem 0;
 `
 
-const ItemCard = ({ menu }) => {
+const ItemCard = ({ menu, initialMenus, setInitialMenus }) => {
+    const handleDelete = ( id ) => {
+        const newMenus = initialMenus.filter(menu => menu.id !== id)
+
+        setInitialMenus(newMenus)
+    }
+
     return (
         <CardContainer>
-            <DeleteButton>
+            <DeleteButton onClick = {() => handleDelete( menu.id )}>
                 <StyledDeleteIcon />
             </DeleteButton>
 
