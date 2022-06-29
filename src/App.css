@@ -283,6 +283,19 @@ Main content
   border: 0.5px solid gray;
 }
 
+.form-select{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  padding: 1rem;
+  background: none;
+  z-index: 1;
+  border: 0.5px solid gray;
+}
+
 .form-label{
   position: absolute;
   left: 1rem;
