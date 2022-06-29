@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import StockSlider from './StockSlider'
 
@@ -26,7 +26,7 @@ const DeleteButton = styled.button`
     /* Se crea un rectángulo de color blanco detrás del ícono para que actúe de fondo */
     &:before {
         position: absolute;
-        top: 6px;
+        top: 5px;
         right: 6px;
         width: 1rem;
         height: 1.3rem;
@@ -64,39 +64,100 @@ const StyledCardGroup = styled(CardGroup)`
 `
 
 const ItemCard = ({ menu, initialMenus, setInitialMenus }) => {
+    const [initialMenu, setInitialMenu] = useState(menu)
+    const [editing, setEditing] = useState(false)
+    const [cardTitle, setCardTitle] = useState(menu.name)
+    const [cardPrice, setCardPrice] = useState(menu.price)
+
     const handleDelete = ( id ) => {
         const newMenus = initialMenus.filter(menu => menu.id !== id)
-
         setInitialMenus(newMenus)
+    }
+
+    const handleEdit = () => {
+        editing ? setEditing(false) : setEditing(true)
+    }
+
+    const handleTitleChange = (event) => {
+        setCardTitle(event.target.value)
+    }
+
+    const handlePriceChange = (event) => {
+        setCardPrice(event.target.value)
+    }
+
+    const handleTitleSubmit = (event) => {
+        event.preventDefault()
+        const newMenu = {...initialMenu, name: cardTitle}
+
+        setInitialMenu(newMenu)
+    }
+
+    const handlePriceSubmit = (event) => {
+        event.preventDefault()
+        const newMenu = {...initialMenu, price: cardPrice}
+
+        setInitialMenu(newMenu)
     }
 
     return (
         <CardContainer>
-            <DeleteButton onClick = {() => handleDelete( menu.id )}>
-                <StyledDeleteIcon />
-            </DeleteButton>
+            {
+                editing
+                ?
+                    <DeleteButton onClick = {() => handleDelete( menu.id )}>
+                        <StyledDeleteIcon />
+                    </DeleteButton>
+                : null
+            }
 
             <Card shadow = "sm" >
                 <Card.Section>
-                    <Image src = { menu.picture } alt = "Fotografía de sushi" height={160}/>
+                    <Image src = { initialMenu.picture } alt = "Fotografía de sushi" height={160}/>
                 </Card.Section>
 
                 <StyledCardGroup>
-                    <Text weight = { 600 } >
-                        { menu.name }
-                    </Text>
+                    {
+                        editing
+                        ?   <form onSubmit = { handleTitleSubmit } >
+                                <input
+                                    name = "titleInput"
+                                    type = "text"
+                                    value = { cardTitle }
+                                    onChange = { handleTitleChange }
+                                    style = {{ width: '8rem' }}
+                                />
+                            </form>
+                        :   <Text weight = { 600 } >
+                                { cardTitle }
+                            </Text>
+                    }
 
                     <Text weight = { 100 } >
-                        { stringifyPrice(menu.price) }
+                        {
+                            editing
+                            ?   <form onSubmit = { handlePriceSubmit } >
+                                    <input
+                                        name = "priceInput"
+                                        type = "text"
+                                        value = { cardPrice }
+                                        onChange = { handlePriceChange }
+                                        style = {{ width: '3rem' }}
+                                    />
+                                </form>
+                            :   <Text weight = { 600 } >
+                                    { stringifyPrice(cardPrice) }
+                                </Text>
+                        }
                     </Text>
                 </StyledCardGroup>
 
                 <StyledCardGroup>
-                    <Button variant="light" color="blue">
+                    <Button variant="light" color="blue" onClick = { handleEdit }>
                         Editar
                     </Button>
 
-                    <StockSlider stockState = { menu.stock }/>
+                    <StockSlider stockState = { initialMenu.stock }/>
                 </StyledCardGroup>
 
             </Card>
