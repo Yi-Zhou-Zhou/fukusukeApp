@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Group, Modal, PasswordInput, Select, TextInput } from "@mantine/core";
+import "dayjs/locale/es-mx";
+import { DatePicker } from "@mantine/dates";
 import axios from "axios";
 
 import usePasswordSecurityValidation from "../../hooks/usePasswordSecurityValidation";
@@ -36,9 +38,7 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
         e.preventDefault();
         if (!passwordValid) {
             const element = document.getElementById("password");
-            element.setCustomValidity(
-                "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número"
-            );
+            element.setCustomValidity("");
             return;
         }
         if (password !== confirmPassword) {
@@ -83,9 +83,8 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
         if (newProvinces) setProvinces(newProvinces);
         else setProvinces([]);
 
-        setCredentials({ ...credentials, province: "", commune: ""})
-
-    }, [credentials.region])
+        setCredentials({ ...credentials, province: "", commune: "" });
+    }, [credentials.region]);
 
     useEffect(() => {
         // update communes
@@ -96,10 +95,8 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
         if (newCommunes) setCommunes(newCommunes);
         else setCommunes([]);
 
-        setCredentials({ ...credentials, commune: ""})
-
-    }, [credentials.province])
-    
+        setCredentials({ ...credentials, commune: "" });
+    }, [credentials.province]);
 
     return (
         <Modal
@@ -118,13 +115,10 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
             transitionDuration={400}
             position="center"
             title="Registrarse"
-            size = "lg"
+            size="lg"
         >
             <form className="form" onSubmit={registerUser}>
-                <Group 
-                    direction = "row" 
-                    grow
-                >
+                <Group direction="row" grow>
                     <TextInput
                         placeholder="Nombre Completo *"
                         name="name"
@@ -147,129 +141,115 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                         onChange={handleChange}
                         required
                     />
-                </Group>
 
-                <Group
-                    direction = "row"
-                    grow
-                >
-                    <PasswordInput
-                        id = "password"
-                        placeholder="Contraseña *"
-                        onChange={(e) => setPassword(e.target.value)}
-                        onInput={(e) => e.target.setCustomValidity("")}
-                        required
-                    />
-
-                    <PasswordInput
-                        id="confirmPassword"
-                        placeholder="Confirmar contraseña *"
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        onInput={(e) => e.target.setCustomValidity("")}
-                        required
-                    />
-                </Group>
-
-                <div className="input-field">
-                    <input
-                        type="text"
-                        className="form-input"
-                        placeholder=" "
-                        name="address"
-                        onChange={handleChange}
-                        required
-                    />
-                    <label htmlFor="" className="form-label">
-                        Dirección *
-                    </label>
-                </div>
-
-                <Group grow> 
-                    <Select
-                        name="region"
-                        placeholder = "Seleccione región"
-                        required
-                        value = { credentials.region }
-                        onChange = {(newValue) => setCredentials({ ...credentials, region: newValue})}
-
-                        data = { regionsData.map(region =>
-                            region.region
-                        )}
-                    />
-
-                    <Select
-                        name="province"
-                        placeholder = "Seleccione provincia"
-                        required
-                        value={credentials.province}
-                        onChange={(newValue) => setCredentials({ ...credentials, province: newValue})}
-
-                        data = { provinces.map(province => province.name)}
-                    />
-
-                    <Select
-                        name="commune"
-                        placeholder = "Seleccione comuna"
-                        required
-                        value = {credentials.commune}
-                        onChange = {(newValue) => setCredentials({ ...credentials, commune: newValue})}
-
-                        data = { communes.map(commune => commune.name) }
-                    />
-                        {/* <option value=""></option>
-                        {communes.map((commune) => (
-                            <option value={commune.name}>{commune.name}</option>
-                        ))} */}
-                </Group>
-
-                <div className="input-field">
-                    <input
-                        type="date"
-                        className="form-input"
-                        placeholder=" "
-                        name="birthday"
-                        onChange={handleChange}
-                        required
-                    />
-                    <label htmlFor="" className="form-label">
-                        Fecha de nacimiento *
-                    </label>
-                </div>
-
-                <div className="input-field">
-                    <label
-                        htmlFor=""
-                        className="form-label"
-                        hidden={credentials.sex !== ""}
-                    >
-                        Sexo *
-                    </label>
-                    <select
-                        className="form-select"
-                        name="sex"
-                        onChange={handleChange}
-                        required
-                    >
-                        <option value=""></option>
-                        <option value="M">Masculino</option>
-                        <option value="F">Femenino</option>
-                        <option value="O">Otro</option>
-                    </select>
-                </div>
-
-                <div className="input-field">
-                    <input
-                        type="text"
-                        className="form-input"
-                        placeholder=" "
+                    <TextInput
+                        placeholder="Celular *"
                         name="phone"
                         onChange={handleChange}
                         required
                     />
-                    <label htmlFor="" className="form-label">
-                        Celular *
-                    </label>
-                </div>
+                </Group>
+
+                <PasswordInput
+                    id="password"
+                    placeholder="Contraseña *"
+                    onChange={(e) => setPassword(e.target.value)}
+                    onInput={(e) => e.target.setCustomValidity("")}
+                    required
+                    description="La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número"
+                    error={!passwordValid}
+                />
+                <PasswordInput
+                    id="confirmPassword"
+                    placeholder="Confirmar contraseña *"
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    onInput={(e) => e.target.setCustomValidity("")}
+                    required
+                    error={
+                        confirmPassword !== "" &&
+                        password !== confirmPassword &&
+                        "Las contraseñas no coinciden"
+                    }
+                />
+
+                <TextInput
+                    placeholder="Dirección *"
+                    name="address"
+                    onChange={handleChange}
+                    required
+                />
+
+                <Group grow>
+                    <Select
+                        name="region"
+                        placeholder="Seleccione región"
+                        required
+                        value={credentials.region}
+                        onChange={(newValue) =>
+                            setCredentials({ ...credentials, region: newValue })
+                        }
+                        data={regionsData.map((region) => region.region)}
+                    />
+
+                    <Select
+                        name="province"
+                        placeholder="Seleccione provincia"
+                        required
+                        value={credentials.province}
+                        onChange={(newValue) =>
+                            setCredentials({
+                                ...credentials,
+                                province: newValue,
+                            })
+                        }
+                        data={provinces.map((province) => province.name)}
+                    />
+
+                    <Select
+                        name="commune"
+                        placeholder="Seleccione comuna"
+                        required
+                        value={credentials.commune}
+                        onChange={(newValue) =>
+                            setCredentials({
+                                ...credentials,
+                                commune: newValue,
+                            })
+                        }
+                        data={communes.map((commune) => commune.name)}
+                    />
+                </Group>
+
+                <Group grow>
+                    <DatePicker
+                        placeholder="Fecha de nacimiento *"
+                        name="birthday"
+                        locale="es-mx"
+                        onChange={(newValue) =>
+                            setCredentials({
+                                ...credentials,
+                                birthday: newValue,
+                            })
+                        }
+                        required
+                        allowFreeInput
+                    />
+
+                    <Select
+                        name="sex"
+                        placeholder="Sexo"
+                        required
+                        value={credentials.sex}
+                        onChange={(newValue) =>
+                            setCredentials({ ...credentials, sex: newValue })
+                        }
+                        data={[
+                            { value: "M", label: "Hombre" },
+                            { value: "F", label: "Mujer" },
+                            { value: "O", label: "Otro" },
+                        ]}
+                    />
+                </Group>
 
                 <button className="form-button" type="submit">
                     Crear Cuenta
@@ -288,7 +268,7 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                     </div>
                 </div>
 
-                <div className = "modal-footer">
+                <div className="modal-footer">
                     <p className="modal-p">¿Ya tienes una cuenta? </p>
                     <p
                         className="modal-p"
