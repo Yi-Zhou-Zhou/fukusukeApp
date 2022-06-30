@@ -29,38 +29,7 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
     const [communes, setCommunes] = useState([]);
 
     const handleChange = (e) => {
-        if (e.target.name === "region") {
-            // update provinces
-            const newProvinces = regionsData.find(
-                (region) => e.target.value === region.region
-            )?.provincias;
-            if (newProvinces) setProvinces(newProvinces);
-            else setProvinces([]);
-
-            // clear province and commune
-            setCredentials({
-                ...credentials,
-                [e.target.name]: e.target.value,
-                province: "",
-                commune: "",
-            });
-        } else if (e.target.name === "province") {
-            // update communes
-            const newCommunes = provinces.find(
-                (province) => province.name === e.target.value
-            )?.comunas;
-            if (newCommunes) setCommunes(newCommunes);
-            else setCommunes([]);
-
-            // clear commune
-            setCredentials({
-                ...credentials,
-                [e.target.name]: e.target.value,
-                commune: "",
-            });
-        } else {
-            setCredentials({ ...credentials, [e.target.name]: e.target.value });
-        }
+        setCredentials({ ...credentials, [e.target.name]: e.target.value });
     };
 
     async function registerUser(e) {
@@ -104,6 +73,33 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
             }
         }
     }
+
+    useEffect(() => {
+        // update provinces
+        const newProvinces = regionsData.find(
+            (region) => credentials.region === region.region
+        )?.provincias;
+
+        if (newProvinces) setProvinces(newProvinces);
+        else setProvinces([]);
+
+        setCredentials({ ...credentials, province: "", commune: ""})
+
+    }, [credentials.region])
+
+    useEffect(() => {
+        // update communes
+        const newCommunes = provinces.find(
+            (province) => credentials.province === province.name
+        )?.comunas;
+
+        if (newCommunes) setCommunes(newCommunes);
+        else setCommunes([]);
+
+        setCredentials({ ...credentials, commune: ""})
+
+    }, [credentials.province])
+    
 
     return (
         <Modal
@@ -188,39 +184,42 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                     </label>
                 </div>
 
-                <Group>
+                <Group grow> 
                     <Select
                         name="region"
                         placeholder = "Seleccione región"
                         required
                         value = { credentials.region }
+                        onChange = {(newValue) => setCredentials({ ...credentials, region: newValue})}
 
-                        data = { regionsData.map(region => (
-                            { value: region.region, label: region.region }
-                        ))}
+                        data = { regionsData.map(region =>
+                            region.region
+                        )}
                     />
 
-                    {/* <Select
+                    <Select
                         name="province"
                         placeholder = "Seleccione provincia"
-                        onChange={handleChange}
-                        value={credentials.province}
                         required
-                        data = { regionsData.map()}
+                        value={credentials.province}
+                        onChange={(newValue) => setCredentials({ ...credentials, province: newValue})}
+
+                        data = { provinces.map(province => province.name)}
                     />
 
-                    <select
-                        class="form-select"
+                    <Select
                         name="commune"
-                        onChange={handleChange}
-                        value={credentials.commune}
+                        placeholder = "Seleccione comuna"
                         required
-                    >
-                        <option value=""></option>
+                        value = {credentials.commune}
+                        onChange = {(newValue) => setCredentials({ ...credentials, commune: newValue})}
+
+                        data = { communes.map(commune => commune.name) }
+                    />
+                        {/* <option value=""></option>
                         {communes.map((commune) => (
                             <option value={commune.name}>{commune.name}</option>
-                        ))}
-                    </select> */}
+                        ))} */}
                 </Group>
 
                 <div className="input-field">
