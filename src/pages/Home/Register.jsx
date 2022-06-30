@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, SelectChevronIcon } from "@mantine/core";
+import { Group, Modal, PasswordInput, Select, TextInput } from "@mantine/core";
 import axios from "axios";
 
 import usePasswordSecurityValidation from "../../hooks/usePasswordSecurityValidation";
@@ -19,8 +19,10 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
         email: "",
         phone: "",
     });
+
     const [password, setPassword, passwordValid] =
         usePasswordSecurityValidation();
+
     const [confirmPassword, setConfirmPassword] = useState("");
 
     const [provinces, setProvinces] = useState([]);
@@ -120,105 +122,93 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
             transitionDuration={400}
             position="center"
             title="Registrarse"
+            size = "lg"
         >
             <form className="form" onSubmit={registerUser}>
-                <div className="input-field">
-                    <input
-                        type="text"
-                        class="form-input"
-                        placeholder=" "
+                <Group 
+                    direction = "row" 
+                    grow
+                >
+                    <TextInput
+                        placeholder="Nombre Completo *"
+                        name="name"
+                        required
+                        onChange={handleChange}
+                    />
+
+                    <TextInput
+                        placeholder="RUN *"
                         name="run"
                         onChange={handleChange}
                         required
                     />
-                    <label for="" class="form-label">
-                        RUN *
-                    </label>
-                </div>
+                </Group>
 
-                <div className="input-field">
-                    <input
-                        type="text"
-                        class="form-input"
-                        placeholder=" "
-                        name="name"
+                <Group grow>
+                    <TextInput
+                        placeholder="Ingrese su correo electrónico"
+                        name="email"
                         onChange={handleChange}
                         required
                     />
-                    <label for="" class="form-label">
-                        Nombre completo *
-                    </label>
-                </div>
+                </Group>
+
+                <Group
+                    direction = "row"
+                    grow
+                >
+                    <PasswordInput
+                        id = "password"
+                        placeholder="Contraseña *"
+                        onChange={(e) => setPassword(e.target.value)}
+                        onInput={(e) => e.target.setCustomValidity("")}
+                        required
+                    />
+
+                    <PasswordInput
+                        id="confirmPassword"
+                        placeholder="Confirmar contraseña *"
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        onInput={(e) => e.target.setCustomValidity("")}
+                        required
+                    />
+                </Group>
 
                 <div className="input-field">
                     <input
                         type="text"
-                        class="form-input"
+                        className="form-input"
                         placeholder=" "
                         name="address"
                         onChange={handleChange}
                         required
                     />
-                    <label for="" class="form-label">
+                    <label htmlFor="" className="form-label">
                         Dirección *
                     </label>
                 </div>
 
-                <div className="input-field">
-                    <label
-                        for=""
-                        class="form-label"
-                        hidden={credentials.region !== ""}
-                    >
-                        Región *
-                    </label>
-                    <select
-                        class="form-select"
+                <Group>
+                    <Select
                         name="region"
-                        onChange={handleChange}
+                        placeholder = "Seleccione región"
                         required
-                    >
-                        <option value=""></option>
-                        {regionsData.map((region) => (
-                            <option value={region.region}>
-                                {region.region}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                        value = { credentials.region }
 
-                <div className="input-field">
-                    <label
-                        for=""
-                        class="form-label"
-                        hidden={credentials.province !== ""}
-                    >
-                        Provincia *
-                    </label>
-                    <select
-                        class="form-select"
+                        data = { regionsData.map(region => (
+                            { value: region.region, label: region.region }
+                        ))}
+                    />
+
+                    {/* <Select
                         name="province"
+                        placeholder = "Seleccione provincia"
                         onChange={handleChange}
                         value={credentials.province}
                         required
-                    >
-                        <option value=""></option>
-                        {provinces.map((province) => (
-                            <option value={province.name}>
-                                {province.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                        data = { regionsData.map()}
+                    />
 
-                <div className="input-field">
-                    <label
-                        for=""
-                        class="form-label"
-                        hidden={credentials.commune !== ""}
-                    >
-                        Comuna *
-                    </label>
                     <select
                         class="form-select"
                         name="commune"
@@ -230,33 +220,33 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                         {communes.map((commune) => (
                             <option value={commune.name}>{commune.name}</option>
                         ))}
-                    </select>
-                </div>
+                    </select> */}
+                </Group>
 
                 <div className="input-field">
                     <input
                         type="date"
-                        class="form-input"
+                        className="form-input"
                         placeholder=" "
                         name="birthday"
                         onChange={handleChange}
                         required
                     />
-                    <label for="" class="form-label">
+                    <label htmlFor="" className="form-label">
                         Fecha de nacimiento *
                     </label>
                 </div>
 
                 <div className="input-field">
                     <label
-                        for=""
-                        class="form-label"
+                        htmlFor=""
+                        className="form-label"
                         hidden={credentials.sex !== ""}
                     >
                         Sexo *
                     </label>
                     <select
-                        class="form-select"
+                        className="form-select"
                         name="sex"
                         onChange={handleChange}
                         required
@@ -271,64 +261,18 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                 <div className="input-field">
                     <input
                         type="text"
-                        class="form-input"
-                        placeholder=" "
-                        name="email"
-                        onChange={handleChange}
-                        required
-                    />
-                    <label for="" class="form-label">
-                        Correo electrónico *
-                    </label>
-                </div>
-
-                <div class="input-field">
-                    <input
-                        type="text"
-                        class="form-input"
+                        className="form-input"
                         placeholder=" "
                         name="phone"
                         onChange={handleChange}
                         required
                     />
-                    <label for="" class="form-label">
+                    <label htmlFor="" className="form-label">
                         Celular *
                     </label>
                 </div>
 
-                <div class="input-field">
-                    <input
-                        id="password"
-                        type="password"
-                        class="form-input"
-                        placeholder=" "
-                        name="password"
-                        onChange={(e) => setPassword(e.target.value)}
-                        onInput={(e) => e.target.setCustomValidity("")}
-                        required
-                    />
-                    <label for="" class="form-label">
-                        Contraseña *
-                    </label>
-                </div>
-
-                <div class="input-field">
-                    <input
-                        id="confirmPassword"
-                        type="password"
-                        class="form-input"
-                        placeholder=" "
-                        name="confirmPassword"
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        onInput={(e) => e.target.setCustomValidity("")}
-                        required
-                    />
-                    <label for="" class="form-label">
-                        Confirmar Contraseña *
-                    </label>
-                </div>
-
-                <button class="form-button" type="submit">
+                <button className="form-button" type="submit">
                     Crear Cuenta
                 </button>
 
@@ -339,13 +283,13 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                             value="lsRememberMe"
                             id="rememberMe"
                         />
-                        <label for="rememberMe">
+                        <label htmlFor="rememberMe">
                             Recibir ofertas y notificaciones
                         </label>
                     </div>
                 </div>
 
-                <div modal-footer>
+                <div className = "modal-footer">
                     <p className="modal-p">¿Ya tienes una cuenta? </p>
                     <p
                         className="modal-p"
