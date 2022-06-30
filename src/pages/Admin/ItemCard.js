@@ -34,7 +34,7 @@ const DeleteButton = styled.button`
         background-color: white;
         content: "";
         z-index: -1;
-    }    
+    }
 `
 
 // "styled-component" para el ícono dentro de "DeleteButton"
@@ -47,7 +47,7 @@ const CardContainer = styled.div`
     margin: 1rem;
     position: relative;
 
-    width: 19.25rem;
+    width: 18rem;
 `
 
 // "styled-component" para grupos dentro de Cards
