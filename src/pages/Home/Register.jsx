@@ -40,13 +40,9 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
     async function registerUser(e) {
         e.preventDefault();
         if (!passwordValid) {
-            const element = document.getElementById("password");
-            element.setCustomValidity("");
             return;
         }
         if (password !== confirmPassword) {
-            const element = document.getElementById("confirmPassword");
-            element.setCustomValidity("Las contraseñas no coinciden");
             return;
         }
         // register user
@@ -172,7 +168,6 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                     id="password"
                     placeholder="Contraseña *"
                     onChange={(e) => setPassword(e.target.value)}
-                    onInput={(e) => e.target.setCustomValidity("")}
                     required
                     description="La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número"
                     error={!passwordValid}
@@ -181,7 +176,6 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                     id="confirmPassword"
                     placeholder="Confirmar contraseña *"
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    onInput={(e) => e.target.setCustomValidity("")}
                     required
                     error={
                         confirmPassword !== "" &&
