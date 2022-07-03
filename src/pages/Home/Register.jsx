@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Modal, SelectChevronIcon } from "@mantine/core";
+import React, { useState} from "react";
+import { Modal} from "@mantine/core";
 import axios from "axios";
-
+import { Text } from "@mantine/core";
 import usePasswordSecurityValidation from "../../hooks/usePasswordSecurityValidation";
 // import regions json
 import regionsData from "../../json/regiones-provincias-comunas.json";
 
 function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
+    const [formError, setError] = useState(""); 
     const [credentials, setCredentials] = useState({
         run: "",
         name: "",
@@ -19,6 +20,9 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
         email: "",
         phone: "",
     });
+
+    const [isSubmit, setIsSubmit] = useState(false);
+
     const [password, setPassword, passwordValid] =
         usePasswordSecurityValidation();
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -63,36 +67,40 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
 
     async function registerUser(e) {
         e.preventDefault();
+        setIsSubmit(true);
         if (!passwordValid) {
             const element = document.getElementById("password");
             element.setCustomValidity(
                 "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número"
             );
+            setError({...formError, password: "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número"})
             return;
         }
         if (password !== confirmPassword) {
             const element = document.getElementById("confirmPassword");
             element.setCustomValidity("Las contraseñas no coinciden");
+            setError({...formError, password: "Las contraseñas no coinciden"})
             return;
         }
+        setError(formError.password = "")
         // register user
         console.log(credentials);
         try {
             const { data } = await axios.post(
-                "http://localhost:8080/register",
+                "http://localhost:8080/register",    
                 {
                     ...credentials,
                     password: password,
                     role: "client",
                 }
             );
-            console.log(data);
+            
             // setOpenedSignUp(false);
             // setOpenedSignIn(true);
         } catch (error) {
             if (error.response) {
                 // The request was made and the server responded with a status code
-                console.log(error.response.data.message);
+                setError({...formError, email: error.response.data.message});
             } else if (error.request) {
                 // The request was made but no response was received
                 console.log(error.request);
@@ -115,12 +123,16 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
             }}
             centered
             opened={openedSignUp}
-            onClose={() => setOpenedSignUp(false)}
+            onClose={() => {
+                setOpenedSignUp(false);
+                setError("");
+            }}
             transition="fade"
             transitionDuration={400}
             position="center"
             title="Registrarse"
-        >
+        >   
+            
             <form className="form" onSubmit={registerUser}>
                 <div className="input-field">
                     <input
@@ -130,6 +142,8 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                         name="run"
                         onChange={handleChange}
                         required
+                        onInvalid={e => e.target.setCustomValidity("El RUN es obligatorio")}
+                        onInput={e => e.target.setCustomValidity('')}
                     />
                     <label for="" class="form-label">
                         RUN *
@@ -144,6 +158,8 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                         name="name"
                         onChange={handleChange}
                         required
+                        onInvalid={e => e.target.setCustomValidity("El Nombre es obligatorio")}
+                        onInput={e => e.target.setCustomValidity('')}
                     />
                     <label for="" class="form-label">
                         Nombre completo *
@@ -158,6 +174,8 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                         name="address"
                         onChange={handleChange}
                         required
+                        onInvalid={e => e.target.setCustomValidity("La dirección es obligatoria")}
+                        onInput={e => e.target.setCustomValidity('')}
                     />
                     <label for="" class="form-label">
                         Dirección *
@@ -177,6 +195,8 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                         name="region"
                         onChange={handleChange}
                         required
+                        onInvalid={e => e.target.setCustomValidity("La región es obligatoria")}
+                        onInput={e => e.target.setCustomValidity('')}
                     >
                         <option value=""></option>
                         {regionsData.map((region) => (
@@ -201,6 +221,8 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                         onChange={handleChange}
                         value={credentials.province}
                         required
+                        onInvalid={e => e.target.setCustomValidity("La Provincia es obligatoria")}
+                        onInput={e => e.target.setCustomValidity('')}
                     >
                         <option value=""></option>
                         {provinces.map((province) => (
@@ -225,6 +247,8 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                         onChange={handleChange}
                         value={credentials.commune}
                         required
+                        onInvalid={e => e.target.setCustomValidity("La Comuna es obligatoria")}
+                        onInput={e => e.target.setCustomValidity('')}
                     >
                         <option value=""></option>
                         {communes.map((commune) => (
@@ -241,6 +265,8 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                         name="birthday"
                         onChange={handleChange}
                         required
+                        onInvalid={e => e.target.setCustomValidity("La Fecha de nacimiento es obligatoria")}
+                        onInput={e => e.target.setCustomValidity('')}
                     />
                     <label for="" class="form-label">
                         Fecha de nacimiento *
@@ -259,6 +285,8 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                         class="form-select"
                         name="sex"
                         onChange={handleChange}
+                        onInvalid={e => e.target.setCustomValidity("El Sexo es obligatorio")}
+                        onInput={e => e.target.setCustomValidity('')}
                         required
                     >
                         <option value=""></option>
@@ -276,12 +304,18 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                         name="email"
                         onChange={handleChange}
                         required
+                        onInvalid={e => e.target.setCustomValidity("El Correo electrónico es obligatorio")}
+                        onInput={e => e.target.setCustomValidity('')}
                     />
                     <label for="" class="form-label">
                         Correo electrónico *
                     </label>
                 </div>
-
+                {formError.email && 
+                    <Text color="red" size="s" weight="bold">
+                        {formError.email}
+                    </Text>
+                }                    
                 <div class="input-field">
                     <input
                         type="text"
@@ -290,6 +324,8 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                         name="phone"
                         onChange={handleChange}
                         required
+                        onInvalid={e => e.target.setCustomValidity("El Celular es obligatorio")}
+                        onInput={e => e.target.setCustomValidity('')}
                     />
                     <label for="" class="form-label">
                         Celular *
@@ -297,6 +333,7 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                 </div>
 
                 <div class="input-field">
+                    
                     <input
                         id="password"
                         type="password"
@@ -304,14 +341,22 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                         placeholder=" "
                         name="password"
                         onChange={(e) => setPassword(e.target.value)}
+                        
                         onInput={(e) => e.target.setCustomValidity("")}
                         required
+                        
+                        
                     />
                     <label for="" class="form-label">
                         Contraseña *
                     </label>
+                    
                 </div>
-
+                {formError.password && 
+                    <Text color="red" size="s" weight="bold">
+                        {formError.password}
+                    </Text>
+                }
                 <div class="input-field">
                     <input
                         id="confirmPassword"
@@ -327,6 +372,11 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                         Confirmar Contraseña *
                     </label>
                 </div>
+                {formError.password && 
+                    <Text color="red" size="s" weight="bold">
+                        {formError.password}
+                    </Text>
+                }
 
                 <button class="form-button" type="submit">
                     Crear Cuenta
