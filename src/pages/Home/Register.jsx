@@ -7,7 +7,7 @@ import usePasswordSecurityValidation from "../../hooks/usePasswordSecurityValida
 import regionsData from "../../json/regiones-provincias-comunas.json";
 
 function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
-    const [formError, setError] = useState(""); 
+    const [formError, setError] = useState("")
     const [credentials, setCredentials] = useState({
         run: "",
         name: "",
@@ -82,7 +82,10 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
             setError({...formError, password: "Las contraseñas no coinciden"})
             return;
         }
-        setError(formError.password = "")
+        
+        setError({...formError, password: ""})
+        
+        console.log(formError)
         // register user
         console.log(credentials);
         try {

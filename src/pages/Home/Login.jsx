@@ -2,8 +2,15 @@ import React, { useState } from "react";
 import { Modal } from "@mantine/core";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Text } from "@mantine/core";
 
 function Login({ openedSignIn, setOpenedSignIn, setOpenedSignUp }) {
+    const [formError, setError] = useState({
+        password: "",
+        email: "",
+    }); 
+
+
     const navigate = useNavigate();
     const [credentials, setCredentials] = useState({});
     const handleChange = (e) => {
@@ -29,6 +36,10 @@ function Login({ openedSignIn, setOpenedSignIn, setOpenedSignUp }) {
             else if (userType === "admin") navigate("/admin");
         } catch (error) {
             console.log(error.response.data.err.message);
+            if (error.response.data.err.message.includes("correo")) setError({...formError, email: error.response.data.err.message})
+            else setError({...formError, password: error.response.data.err.message, email: ""})
+
+            
         }
     };
 
@@ -63,6 +74,10 @@ function Login({ openedSignIn, setOpenedSignIn, setOpenedSignUp }) {
                         Correo electrónico
                     </label>
                 </div>
+                {formError.email &&
+                <Text color="red" size="s" weight="bold">
+                        {formError.email}
+                </Text>}
                 <div class="input-field">
                     <input
                         type="password"
@@ -75,6 +90,9 @@ function Login({ openedSignIn, setOpenedSignIn, setOpenedSignUp }) {
                         Contraseña
                     </label>
                 </div>
+                {formError.password && <Text color="red" size="s" weight="bold">
+                        {formError.password}
+                    </Text>}
                 <button class="form-button" onClick={handleLogin}>
                     Ingresar
                 </button>
