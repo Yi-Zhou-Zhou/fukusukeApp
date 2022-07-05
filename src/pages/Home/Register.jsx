@@ -1,5 +1,7 @@
-import React, { useState} from "react";
-import { Modal} from "@mantine/core";
+import React, { useState, useEffect } from "react";
+import { Group, Modal, PasswordInput, Select, TextInput } from "@mantine/core";
+import "dayjs/locale/es-mx";
+import { DatePicker } from "@mantine/dates";
 import axios from "axios";
 import { Text } from "@mantine/core";
 import usePasswordSecurityValidation from "../../hooks/usePasswordSecurityValidation";
@@ -21,65 +23,27 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
         phone: "",
     });
 
-    const [isSubmit, setIsSubmit] = useState(false);
-
     const [password, setPassword, passwordValid] =
         usePasswordSecurityValidation();
+
     const [confirmPassword, setConfirmPassword] = useState("");
 
     const [provinces, setProvinces] = useState([]);
     const [communes, setCommunes] = useState([]);
 
+    const [emailErrorMessage, setEmailErrorMessage] = useState("");
+
     const handleChange = (e) => {
-        if (e.target.name === "region") {
-            // update provinces
-            const newProvinces = regionsData.find(
-                (region) => e.target.value === region.region
-            )?.provincias;
-            if (newProvinces) setProvinces(newProvinces);
-            else setProvinces([]);
-
-            // clear province and commune
-            setCredentials({
-                ...credentials,
-                [e.target.name]: e.target.value,
-                province: "",
-                commune: "",
-            });
-        } else if (e.target.name === "province") {
-            // update communes
-            const newCommunes = provinces.find(
-                (province) => province.name === e.target.value
-            )?.comunas;
-            if (newCommunes) setCommunes(newCommunes);
-            else setCommunes([]);
-
-            // clear commune
-            setCredentials({
-                ...credentials,
-                [e.target.name]: e.target.value,
-                commune: "",
-            });
-        } else {
-            setCredentials({ ...credentials, [e.target.name]: e.target.value });
-        }
+        setCredentials({ ...credentials, [e.target.name]: e.target.value });
     };
 
     async function registerUser(e) {
         e.preventDefault();
         setIsSubmit(true);
         if (!passwordValid) {
-            const element = document.getElementById("password");
-            element.setCustomValidity(
-                "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número"
-            );
-            setError({...formError, password: "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número"})
             return;
         }
         if (password !== confirmPassword) {
-            const element = document.getElementById("confirmPassword");
-            element.setCustomValidity("Las contraseñas no coinciden");
-            setError({...formError, password: "Las contraseñas no coinciden"})
             return;
         }
         
@@ -103,7 +67,7 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
         } catch (error) {
             if (error.response) {
                 // The request was made and the server responded with a status code
-                setError({...formError, email: error.response.data.message});
+                setEmailErrorMessage(error.response.data.message);
             } else if (error.request) {
                 // The request was made but no response was received
                 console.log(error.request);
@@ -113,6 +77,30 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
             }
         }
     }
+
+    useEffect(() => {
+        // update provinces
+        const newProvinces = regionsData.find(
+            (region) => credentials.region === region.region
+        )?.provincias;
+
+        if (newProvinces) setProvinces(newProvinces);
+        else setProvinces([]);
+
+        setCredentials({ ...credentials, province: "", commune: "" });
+    }, [credentials.region]);
+
+    useEffect(() => {
+        // update communes
+        const newCommunes = provinces.find(
+            (province) => credentials.province === province.name
+        )?.comunas;
+
+        if (newCommunes) setCommunes(newCommunes);
+        else setCommunes([]);
+
+        setCredentials({ ...credentials, commune: "" });
+    }, [credentials.province]);
 
     return (
         <Modal
@@ -134,254 +122,147 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
             transitionDuration={400}
             position="center"
             title="Registrarse"
-        >   
-            
+            size="lg"
+        >
             <form className="form" onSubmit={registerUser}>
-                <div className="input-field">
-                    <input
-                        type="text"
-                        class="form-input"
-                        placeholder=" "
-                        name="run"
-                        onChange={handleChange}
-                        required
-                        onInvalid={e => e.target.setCustomValidity("El RUN es obligatorio")}
-                        onInput={e => e.target.setCustomValidity('')}
-                    />
-                    <label for="" class="form-label">
-                        RUN *
-                    </label>
-                </div>
-
-                <div className="input-field">
-                    <input
-                        type="text"
-                        class="form-input"
-                        placeholder=" "
+                <Group direction="row" grow>
+                    <TextInput
+                        placeholder="Nombre Completo *"
                         name="name"
+                        required
+                        onChange={handleChange}
+                    />
+
+                    <TextInput
+                        placeholder="RUN *"
+                        name="run"
                         onChange={handleChange}
                         required
                         onInvalid={e => e.target.setCustomValidity("El Nombre es obligatorio")}
                         onInput={e => e.target.setCustomValidity('')}
                     />
-                    <label for="" class="form-label">
-                        Nombre completo *
-                    </label>
-                </div>
+                </Group>
 
-                <div className="input-field">
-                    <input
-                        type="text"
-                        class="form-input"
-                        placeholder=" "
-                        name="address"
-                        onChange={handleChange}
-                        required
-                        onInvalid={e => e.target.setCustomValidity("La dirección es obligatoria")}
-                        onInput={e => e.target.setCustomValidity('')}
-                    />
-                    <label for="" class="form-label">
-                        Dirección *
-                    </label>
-                </div>
-
-                <div className="input-field">
-                    <label
-                        for=""
-                        class="form-label"
-                        hidden={credentials.region !== ""}
-                    >
-                        Región *
-                    </label>
-                    <select
-                        class="form-select"
-                        name="region"
-                        onChange={handleChange}
-                        required
-                        onInvalid={e => e.target.setCustomValidity("La región es obligatoria")}
-                        onInput={e => e.target.setCustomValidity('')}
-                    >
-                        <option value=""></option>
-                        {regionsData.map((region) => (
-                            <option value={region.region}>
-                                {region.region}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <div className="input-field">
-                    <label
-                        for=""
-                        class="form-label"
-                        hidden={credentials.province !== ""}
-                    >
-                        Provincia *
-                    </label>
-                    <select
-                        class="form-select"
-                        name="province"
-                        onChange={handleChange}
-                        value={credentials.province}
-                        required
-                        onInvalid={e => e.target.setCustomValidity("La Provincia es obligatoria")}
-                        onInput={e => e.target.setCustomValidity('')}
-                    >
-                        <option value=""></option>
-                        {provinces.map((province) => (
-                            <option value={province.name}>
-                                {province.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <div className="input-field">
-                    <label
-                        for=""
-                        class="form-label"
-                        hidden={credentials.commune !== ""}
-                    >
-                        Comuna *
-                    </label>
-                    <select
-                        class="form-select"
-                        name="commune"
-                        onChange={handleChange}
-                        value={credentials.commune}
-                        required
-                        onInvalid={e => e.target.setCustomValidity("La Comuna es obligatoria")}
-                        onInput={e => e.target.setCustomValidity('')}
-                    >
-                        <option value=""></option>
-                        {communes.map((commune) => (
-                            <option value={commune.name}>{commune.name}</option>
-                        ))}
-                    </select>
-                </div>
-
-                <div className="input-field">
-                    <input
-                        type="date"
-                        class="form-input"
-                        placeholder=" "
-                        name="birthday"
-                        onChange={handleChange}
-                        required
-                        onInvalid={e => e.target.setCustomValidity("La Fecha de nacimiento es obligatoria")}
-                        onInput={e => e.target.setCustomValidity('')}
-                    />
-                    <label for="" class="form-label">
-                        Fecha de nacimiento *
-                    </label>
-                </div>
-
-                <div className="input-field">
-                    <label
-                        for=""
-                        class="form-label"
-                        hidden={credentials.sex !== ""}
-                    >
-                        Sexo *
-                    </label>
-                    <select
-                        class="form-select"
-                        name="sex"
-                        onChange={handleChange}
-                        onInvalid={e => e.target.setCustomValidity("El Sexo es obligatorio")}
-                        onInput={e => e.target.setCustomValidity('')}
-                        required
-                    >
-                        <option value=""></option>
-                        <option value="M">Masculino</option>
-                        <option value="F">Femenino</option>
-                        <option value="O">Otro</option>
-                    </select>
-                </div>
-
-                <div className="input-field">
-                    <input
-                        type="text"
-                        class="form-input"
-                        placeholder=" "
+                <Group grow>
+                    <TextInput
+                        placeholder="Ingrese su correo electrónico"
                         name="email"
                         onChange={handleChange}
                         required
-                        onInvalid={e => e.target.setCustomValidity("El Correo electrónico es obligatorio")}
-                        onInput={e => e.target.setCustomValidity('')}
+                        onInput={() => {
+                            setEmailErrorMessage("");
+                        }}
+                        error={emailErrorMessage}
                     />
-                    <label for="" class="form-label">
-                        Correo electrónico *
-                    </label>
-                </div>
-                {formError.email && 
-                    <Text color="red" size="s" weight="bold">
-                        {formError.email}
-                    </Text>
-                }                    
-                <div class="input-field">
-                    <input
-                        type="text"
-                        class="form-input"
-                        placeholder=" "
+
+                    <TextInput
+                        placeholder="Celular *"
                         name="phone"
                         onChange={handleChange}
                         required
-                        onInvalid={e => e.target.setCustomValidity("El Celular es obligatorio")}
-                        onInput={e => e.target.setCustomValidity('')}
                     />
-                    <label for="" class="form-label">
-                        Celular *
-                    </label>
-                </div>
+                </Group>
 
-                <div class="input-field">
-                    
-                    <input
-                        id="password"
-                        type="password"
-                        class="form-input"
-                        placeholder=" "
-                        name="password"
-                        onChange={(e) => setPassword(e.target.value)}
-                        
-                        onInput={(e) => e.target.setCustomValidity("")}
-                        required
-                        
-                        
-                    />
-                    <label for="" class="form-label">
-                        Contraseña *
-                    </label>
-                    
-                </div>
-                {formError.password && 
-                    <Text color="red" size="s" weight="bold">
-                        {formError.password}
-                    </Text>
-                }
-                <div class="input-field">
-                    <input
-                        id="confirmPassword"
-                        type="password"
-                        class="form-input"
-                        placeholder=" "
-                        name="confirmPassword"
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        onInput={(e) => e.target.setCustomValidity("")}
-                        required
-                    />
-                    <label for="" class="form-label">
-                        Confirmar Contraseña *
-                    </label>
-                </div>
-                {formError.password && 
-                    <Text color="red" size="s" weight="bold">
-                        {formError.password}
-                    </Text>
-                }
+                <PasswordInput
+                    id="password"
+                    placeholder="Contraseña *"
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    description="La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número"
+                    error={!passwordValid}
+                />
+                <PasswordInput
+                    id="confirmPassword"
+                    placeholder="Confirmar contraseña *"
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                    error={
+                        confirmPassword !== "" &&
+                        password !== confirmPassword &&
+                        "Las contraseñas no coinciden"
+                    }
+                />
 
-                <button class="form-button" type="submit">
+                <TextInput
+                    placeholder="Dirección *"
+                    name="address"
+                    onChange={handleChange}
+                    required
+                />
+
+                <Group grow>
+                    <Select
+                        name="region"
+                        placeholder="Seleccione región"
+                        required
+                        value={credentials.region}
+                        onChange={(newValue) =>
+                            setCredentials({ ...credentials, region: newValue })
+                        }
+                        data={regionsData.map((region) => region.region)}
+                    />
+                    
+                    <Select
+                        name="province"
+                        placeholder="Seleccione provincia"
+                        required
+                        value={credentials.province}
+                        onChange={(newValue) =>
+                            setCredentials({
+                                ...credentials,
+                                province: newValue,
+                            })
+                        }
+                        data={provinces.map((province) => province.name)}
+                    />
+
+                    <Select
+                        name="commune"
+                        placeholder="Seleccione comuna"
+                        required
+                        value={credentials.commune}
+                        onChange={(newValue) =>
+                            setCredentials({
+                                ...credentials,
+                                commune: newValue,
+                            })
+                        }
+                        data={communes.map((commune) => commune.name)}
+                    />
+                </Group>
+
+                <Group grow>
+                    <DatePicker
+                        placeholder="Fecha de nacimiento *"
+                        name="birthday"
+                        locale="es-mx"
+                        onChange={(newValue) =>
+                            setCredentials({
+                                ...credentials,
+                                birthday: newValue,
+                            })
+                        }
+                        required
+                        allowFreeInput
+                    />
+
+                    <Select
+                        name="sex"
+                        placeholder="Sexo"
+                        required
+                        value={credentials.sex}
+                        onChange={(newValue) =>
+                            setCredentials({ ...credentials, sex: newValue })
+                        }
+                        data={[
+                            { value: "M", label: "Hombre" },
+                            { value: "F", label: "Mujer" },
+                            { value: "O", label: "Otro" },
+                        ]}
+                    />
+                </Group>
+
+                <button className="form-button" type="submit">
                     Crear Cuenta
                 </button>
 
@@ -392,13 +273,13 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                             value="lsRememberMe"
                             id="rememberMe"
                         />
-                        <label for="rememberMe">
+                        <label htmlFor="rememberMe">
                             Recibir ofertas y notificaciones
                         </label>
                     </div>
                 </div>
 
-                <div modal-footer>
+                <div className="modal-footer">
                     <p className="modal-p">¿Ya tienes una cuenta? </p>
                     <p
                         className="modal-p"

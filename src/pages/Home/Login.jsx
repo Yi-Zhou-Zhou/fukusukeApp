@@ -65,35 +65,28 @@ function Login({ openedSignIn, setOpenedSignIn, setOpenedSignUp }) {
                 <div className="input-field">
                     <input
                         type="text"
-                        class="form-input"
+                        className="form-input"
                         placeholder=" "
                         name="email"
                         onChange={handleChange}
                     />
-                    <label for="" class="form-label">
+                    <label htmlFor="" className="form-label">
                         Correo electrónico
                     </label>
                 </div>
-                {formError.email &&
-                <Text color="red" size="s" weight="bold">
-                        {formError.email}
-                </Text>}
-                <div class="input-field">
+                <div className="input-field">
                     <input
                         type="password"
-                        class="form-input"
+                        className="form-input"
                         placeholder=" "
                         name="password"
                         onChange={handleChange}
                     />
-                    <label for="" class="form-label">
+                    <label htmlFor="" className="form-label">
                         Contraseña
                     </label>
                 </div>
-                {formError.password && <Text color="red" size="s" weight="bold">
-                        {formError.password}
-                    </Text>}
-                <button class="form-button" onClick={handleLogin}>
+                <button className="form-button" onClick={handleLogin}>
                     Ingresar
                 </button>
 
@@ -104,13 +97,13 @@ function Login({ openedSignIn, setOpenedSignIn, setOpenedSignUp }) {
                             value="lsRememberMe"
                             id="rememberMe"
                         />
-                        <label for="rememberMe">Recuérdame</label>
+                        <label htmlFor="rememberMe">Recuérdame</label>
                     </div>
 
                     <p className="modal-forgot">¿Olvidaste tu contraseña?</p>
                 </div>
 
-                <div modal-footer>
+                <div className = "modal-footer">
                     <p className="modal-p">¿No tienes cuenta? </p>
                     <p
                         className="modal-p"
