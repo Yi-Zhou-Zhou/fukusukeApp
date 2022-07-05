@@ -3,12 +3,13 @@ import { Group, Modal, PasswordInput, Select, TextInput } from "@mantine/core";
 import "dayjs/locale/es-mx";
 import { DatePicker } from "@mantine/dates";
 import axios from "axios";
-
+import { Text } from "@mantine/core";
 import usePasswordSecurityValidation from "../../hooks/usePasswordSecurityValidation";
 // import regions json
 import regionsData from "../../json/regiones-provincias-comunas.json";
 
 function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
+    const [formError, setError] = useState("")
     const [credentials, setCredentials] = useState({
         run: "",
         name: "",
@@ -38,24 +39,29 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
 
     async function registerUser(e) {
         e.preventDefault();
+        setIsSubmit(true);
         if (!passwordValid) {
             return;
         }
         if (password !== confirmPassword) {
             return;
         }
+        
+        setError({...formError, password: ""})
+        
+        console.log(formError)
         // register user
         console.log(credentials);
         try {
             const { data } = await axios.post(
-                "http://localhost:8080/register",
+                "http://localhost:8080/register",    
                 {
                     ...credentials,
                     password: password,
                     role: "client",
                 }
             );
-            console.log(data);
+            
             // setOpenedSignUp(false);
             // setOpenedSignIn(true);
         } catch (error) {
@@ -108,7 +114,10 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
             }}
             centered
             opened={openedSignUp}
-            onClose={() => setOpenedSignUp(false)}
+            onClose={() => {
+                setOpenedSignUp(false);
+                setError("");
+            }}
             transition="fade"
             transitionDuration={400}
             position="center"
@@ -129,6 +138,8 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                         name="run"
                         onChange={handleChange}
                         required
+                        onInvalid={e => e.target.setCustomValidity("El Nombre es obligatorio")}
+                        onInput={e => e.target.setCustomValidity('')}
                     />
                 </Group>
 
@@ -190,7 +201,7 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                         }
                         data={regionsData.map((region) => region.region)}
                     />
-
+                    
                     <Select
                         name="province"
                         placeholder="Seleccione provincia"

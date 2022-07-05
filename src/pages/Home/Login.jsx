@@ -2,8 +2,15 @@ import React, { useState } from "react";
 import { Modal } from "@mantine/core";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Text } from "@mantine/core";
 
 function Login({ openedSignIn, setOpenedSignIn, setOpenedSignUp }) {
+    const [formError, setError] = useState({
+        password: "",
+        email: "",
+    }); 
+
+
     const navigate = useNavigate();
     const [credentials, setCredentials] = useState({});
     const handleChange = (e) => {
@@ -29,6 +36,10 @@ function Login({ openedSignIn, setOpenedSignIn, setOpenedSignUp }) {
             else if (userType === "admin") navigate("/admin");
         } catch (error) {
             console.log(error.response.data.err.message);
+            if (error.response.data.err.message.includes("correo")) setError({...formError, email: error.response.data.err.message})
+            else setError({...formError, password: error.response.data.err.message, email: ""})
+
+            
         }
     };
 
