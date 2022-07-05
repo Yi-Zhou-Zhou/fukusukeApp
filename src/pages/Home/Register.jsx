@@ -30,8 +30,7 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
     const [provinces, setProvinces] = useState([]);
     const [communes, setCommunes] = useState([]);
 
-    const [invalidEmailError, setInvalidEmailError] = useState(false);
-    const [emailAlreadyExists, setEmailAlreadyExists] = useState(false);
+    const [emailErrorMessage, setEmailErrorMessage] = useState("");
 
     const handleChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -62,12 +61,7 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
         } catch (error) {
             if (error.response) {
                 // The request was made and the server responded with a status code
-                console.log(error.response.data.message);
-                if (error.response.data.message === "User already exists") {
-                    setEmailAlreadyExists(true);
-                } else if (error.response.data.message === "Invalid email") {
-                    setInvalidEmailError(true);
-                }
+                setEmailErrorMessage(error.response.data.message);
             } else if (error.request) {
                 // The request was made but no response was received
                 console.log(error.request);
@@ -145,15 +139,9 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                         onChange={handleChange}
                         required
                         onInput={() => {
-                            setInvalidEmailError(false);
-                            setEmailAlreadyExists(false);
+                            setEmailErrorMessage("");
                         }}
-                        error={
-                            (invalidEmailError &&
-                                "El correo electrónico no es válido") ||
-                            (emailAlreadyExists &&
-                                "Ya existe un usuario con este correo electrónico")
-                        }
+                        error={emailErrorMessage}
                     />
 
                     <TextInput
