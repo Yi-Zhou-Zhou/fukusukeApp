@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Group, Modal, PasswordInput, Select, TextInput } from "@mantine/core";
+import { Group, Modal, PasswordInput, Select, Text, TextInput } from "@mantine/core";
+import { DatePicker } from '@mantine/dates'
 import axios from "axios";
 
 import usePasswordSecurityValidation from "../../hooks/usePasswordSecurityValidation";
@@ -99,7 +100,6 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
         setCredentials({ ...credentials, commune: ""})
 
     }, [credentials.province])
-    
 
     return (
         <Modal
@@ -170,19 +170,14 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
                     />
                 </Group>
 
-                <div className="input-field">
-                    <input
-                        type="text"
-                        className="form-input"
-                        placeholder=" "
+                <Group grow>
+                    <TextInput
                         name="address"
-                        onChange={handleChange}
+                        placeholder="Ingrese su dirección"
+                        onChange = {handleChange}
                         required
                     />
-                    <label htmlFor="" className="form-label">
-                        Dirección *
-                    </label>
-                </div>
+                </Group>
 
                 <Group grow> 
                     <Select
@@ -216,60 +211,44 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
 
                         data = { communes.map(commune => commune.name) }
                     />
-                        {/* <option value=""></option>
-                        {communes.map((commune) => (
-                            <option value={commune.name}>{commune.name}</option>
-                        ))} */}
                 </Group>
 
-                <div className="input-field">
-                    <input
-                        type="date"
-                        className="form-input"
-                        placeholder=" "
+                <Group grow>
+                    <DatePicker
+                        placeholder="Seleccione su fecha de nacimiento (DD/MM/AAAA)"
                         name="birthday"
-                        onChange={handleChange}
+                        value = { credentials.birthday }
+                        onChange = { (newValue) => setCredentials({ ...credentials, birthday: newValue })}
+
+                        allowFreeInput
                         required
                     />
-                    <label htmlFor="" className="form-label">
-                        Fecha de nacimiento *
-                    </label>
-                </div>
+                </Group>
 
-                <div className="input-field">
-                    <label
-                        htmlFor=""
-                        className="form-label"
-                        hidden={credentials.sex !== ""}
-                    >
-                        Sexo *
-                    </label>
-                    <select
-                        className="form-select"
+                <Group grow>
+                    <Select
                         name="sex"
-                        onChange={handleChange}
+                        placeholder = "Seleccione su género"
                         required
-                    >
-                        <option value=""></option>
-                        <option value="M">Masculino</option>
-                        <option value="F">Femenino</option>
-                        <option value="O">Otro</option>
-                    </select>
-                </div>
+                        value = { credentials.sex }
+                        onChange = {(newValue) => setCredentials({ ...credentials, sex: newValue})}
 
-                <div className="input-field">
-                    <input
-                        type="text"
-                        className="form-input"
-                        placeholder=" "
-                        name="phone"
-                        onChange={handleChange}
+                        data = {[
+                            { value: 'M', label: 'Masculino' },
+                            { value: 'F', label: 'Femenino'  },
+                            { value: 'O', label: 'Otro' },
+                        ]}
+                    />
+                </Group>
+
+                <Group grow>
+                    <TextInput
+                        name = "phone"
+                        placeholder = "Ingrese su número de teléfono (+569XXXXXXXX)"
+                        onChange = {handleChange}
                         required
                     />
-                    <label htmlFor="" className="form-label">
-                        Celular *
-                    </label>
-                </div>
+                </Group>
 
                 <button className="form-button" type="submit">
                     Crear Cuenta
