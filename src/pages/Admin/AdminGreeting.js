@@ -2,7 +2,7 @@ import React from "react";
 
 import { Card, Group, Text, Title } from "@mantine/core";
 
-const Greeting = ({ orders }) => {
+const AdminGreeting = ({ orders }) => {
     return(
         <Group direction = "column">
             <Title order = { 2 } > Ordenes recientes: </Title>
@@ -24,4 +24,4 @@ const Greeting = ({ orders }) => {
     )
 }
 
-export default Greeting
+export default AdminGreeting

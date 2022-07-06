@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 
 import StockSlider from './StockSlider'
 
-import { Button, Card, Group, Image, Text } from '@mantine/core';
+import { Button, Card, Group, Image, Text } from '@mantine/core'
 import {AiFillCloseCircle} from 'react-icons/ai'
 import styled from 'styled-components'
 
-import stringifyPrice from '../../functions/common/stringifyPrice';
+import stringifyPrice from '../../functions/common/stringifyPrice'
 
 // "styled-component" para un botón que borra tarjetas
 const DeleteButton = styled.button`
@@ -133,23 +133,21 @@ const ItemCard = ({ menu, initialMenus, setInitialMenus }) => {
                             </Text>
                     }
 
-                    <Text weight = { 100 } >
-                        {
-                            editing
-                            ?   <form onSubmit = { handlePriceSubmit } >
-                                    <input
-                                        name = "priceInput"
-                                        type = "text"
-                                        value = { cardPrice }
-                                        onChange = { handlePriceChange }
-                                        style = {{ width: '3rem' }}
-                                    />
-                                </form>
-                            :   <Text weight = { 600 } >
-                                    { stringifyPrice(cardPrice) }
-                                </Text>
-                        }
-                    </Text>
+                    {
+                        editing
+                        ?   <form onSubmit = { handlePriceSubmit } >
+                                <input
+                                    name = "priceInput"
+                                    type = "text"
+                                    value = { cardPrice }
+                                    onChange = { handlePriceChange }
+                                    style = {{ width: '3rem' }}
+                                />
+                            </form>
+                        :   <Text weight = { 600 } >
+                                { stringifyPrice(cardPrice) }
+                            </Text>
+                    }
                 </StyledCardGroup>
 
                 <StyledCardGroup>

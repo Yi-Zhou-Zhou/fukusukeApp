@@ -167,7 +167,8 @@ i:hover{
 Main content 
 */
 .main-content{
-  height: 850px;
+  position: absolute;
+  height: calc(100% - 80px);
   width: 100%;
   color: white;
 }
