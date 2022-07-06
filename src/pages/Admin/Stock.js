@@ -61,7 +61,7 @@ const AddMenuButton = styled.button`
 const Stock = () => {
 	const navigate = useNavigate();
 
-	const { products, setProducts } = useContext(ProductContext);
+	const { products } = useContext(ProductContext);
 
 	const [addModalOpened, setAddModalOpened] = useState(false);
 
@@ -78,22 +78,6 @@ const Stock = () => {
 	const byCategoryThenName = (product1, product2) =>
 		byCategory(product1, product2) || byName(product1, product2);
 
-	useEffect(() => {
-		const fetchProducts = async () => {
-			try {
-				const response = await axios.get(`${productApi}/`, {
-					headers: {
-						"x-auth-token": localStorage.getItem("token"),
-					},
-				});
-				setProducts(response.data);
-			} catch (error) {
-				// redirect to home
-				navigate("/");
-			}
-		};
-		fetchProducts();
-	}, []);
 
 	return (
 		<>
