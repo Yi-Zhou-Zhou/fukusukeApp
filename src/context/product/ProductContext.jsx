@@ -40,10 +40,10 @@ export const ProductProvider = ({ children }) => {
 		});
 	};
 
-	const deleteProduct = (id) => {
+	const deleteProduct = (_id) => {
 		dispatch({
 			type: "DELETE_PRODUCT",
-			payload: id,
+			payload: _id,
 		});
 	};
 

@@ -92,7 +92,7 @@ const Stock = () => {
 					</AddMenuButton>
 				</MyCardStyled>
 				{menusToShow.sort(byCategoryThenName).map((product) => (
-					<ItemCard key={product.name} id={product._id} />
+					<ItemCard key={product.name} _id={product._id} />
 				))}
 			</Grid>
 		</>

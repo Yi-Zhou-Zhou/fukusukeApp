@@ -65,11 +65,11 @@ const StyledCardGroup = styled(CardGroup)`
 	margin: 1rem 0;
 `;
 
-const ItemCard = ({ id }) => {
+const ItemCard = ({ _id }) => {
 	const { products, updateProduct, deleteProduct, addProduct } =
 		useContext(ProductContext);
 
-	const product = products.find((product) => product._id === id);
+	const product = products.find((product) => product._id === _id);
 	const [editing, setEditing] = useState(false);
 	const [cardTitle, setCardTitle] = useState(product.name);
 	const [cardPrice, setCardPrice] = useState(product.price);
@@ -77,7 +77,7 @@ const ItemCard = ({ id }) => {
 	const handleDelete = () => {
 		// delete product in db
 		// delete product locally (in context)
-		deleteProduct(id);
+		deleteProduct(_id);
 	};
 
 	const handleEdit = () => {
