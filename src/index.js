@@ -10,7 +10,7 @@ const menus = [
     name: "Tabla de 20 piezas",
     price: 9000,
     stock: 0,
-    type: "tablas",
+    category: "tablas",
     picture: "https://images.unsplash.com/photo-1615361200141-f45040f367be?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"
   },
   {
@@ -18,7 +18,7 @@ const menus = [
     name: "Tabla de 30 piezas",
     price: 11200,
     stock: 0,
-    type: "tablas",
+    category: "tablas",
     picture: "https://images.unsplash.com/photo-1615361200098-9e630ec29b4e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"
   },
   {
@@ -26,7 +26,7 @@ const menus = [
     name: "Tabla de 40 piezas",
     price:  13400,
     stock: 1,
-    type: "tablas",
+    category: "tablas",
     picture: "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=627&q=80"
   },
   {
@@ -34,7 +34,7 @@ const menus = [
     name: "Tabla de 50 piezas",
     price: 15600,
     stock: 1,
-    type: "tablas",
+    category: "tablas",
     picture: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
   },
   {
@@ -42,7 +42,7 @@ const menus = [
     name: "Tabla de 60 piezas",
     price: 17800,
     stock: 1,
-    type: "tablas",
+    category: "tablas",
     picture: "https://images.unsplash.com/photo-1553621042-f6e147245754?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1025&q=80"
   },
   {
@@ -50,7 +50,7 @@ const menus = [
     name: "Koroke",
     price: 4500,
     stock: 0,
-    type: "entradas",
+    category: "entradas",
     picture: "https://image.shutterstock.com/image-photo/broccoli-cream-croquette-japanese-style-600w-260895305.jpg"
   },
   {
@@ -58,7 +58,7 @@ const menus = [
     name: "Gyosas",
     price: 4500,
     stock: 1,
-    type: "entradas",
+    category: "entradas",
     picture: "https://images.unsplash.com/photo-1588182728399-e8f2df121744?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80"
   },
   {
@@ -66,7 +66,7 @@ const menus = [
     name: "Camaron apanado",
     price: 4900,
     stock: 1,
-    type: "entradas",
+    category: "entradas",
     picture: "https://images.unsplash.com/photo-1579887829114-282b4fa31072?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
   },
   {
@@ -74,7 +74,7 @@ const menus = [
     name: "Gohan de pollo teriyaki",
     price: 6000,
     stock: 1,
-    type: "gohan",
+    category: "gohan",
     picture: "https://media.istockphoto.com/photos/traditional-breakfast-of-japan-natt-gohan-picture-id174270968"
   },
   {
@@ -82,7 +82,7 @@ const menus = [
     name: "Takikomi gohan",
     price: 7000,
     stock: 1,
-    type: "gohan",
+    category: "gohan",
     picture: "https://media.istockphoto.com/photos/japanese-food-takikomi-gohan-boiled-rice-picture-id1202391123"
   },
   {
@@ -90,7 +90,7 @@ const menus = [
     name: "Ramen 1",
     price: 12000,
     stock: 0,
-    type: "ramen",
+    category: "ramen",
     picture: "https://images.unsplash.com/photo-1617421753170-46511a8d73fc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80"
   },
   {
@@ -98,7 +98,7 @@ const menus = [
     name: "Ramen 2",
     price: 12000,
     stock: 1,
-    type: "ramen",
+    category: "ramen",
     picture: "https://images.unsplash.com/photo-1623341214825-9f4f963727da?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
   },
   {
@@ -106,7 +106,7 @@ const menus = [
     name: "Ramen 3",
     price: 12000,
     stock: 1,
-    type: "ramen",
+    category: "ramen",
     picture: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1160&q=80"
   }
 ]
@@ -159,7 +159,7 @@ const orders = [
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App menus = { menus } orders = { orders } users = { users } />
+    <App orders = { orders } users = { users } />
   </React.StrictMode>
 );
 
