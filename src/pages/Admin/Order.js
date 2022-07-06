@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useContext} from 'react'
 
 import { Card, Text } from '@mantine/core'
 
@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import { VscTriangleRight } from 'react-icons/vsc'
 
 import stringifyPrice from '../../functions/common/stringifyPrice';
+
+import { ProductContext } from '../../context/product/ProductContext';
 
 const onlyTime = ( date ) => {
     const dateObject = new Date( date )
@@ -20,11 +22,11 @@ const addWaitingTime = ( date, hours ) => {
     return(newDateObject.toLocaleTimeString())
 }
 
-const calculateOrderPrice = ( menus, orderContent ) => {
+const calculateOrderPrice = ( products, orderContent ) => {
     return(
-        menus
-            .filter(menu => orderContent.includes(menu.id))
-            .map(menu => menu.price)
+        products
+            .filter(product => orderContent.includes(product._id))
+            .map(product => product.price)
             .reduce((prev, curr) => prev + curr, 0)
     )
 }
@@ -48,7 +50,8 @@ const StyledExpandButton = styled(VscTriangleRight)`
     padding: 0;
 `
 
-const Order = ({ handleSelectOrder, menus, order, selected }) => {
+const Order = ({ handleSelectOrder, order, selected }) => {
+    const { products } = useContext(ProductContext)
     return(
         <Card style = {{ padding: '1rem 3rem', width: '100%', backgroundColor: '#d9d9d9' }}>
             <ExpandButton onClick = { () => handleSelectOrder( order.id ) }>
@@ -59,7 +62,7 @@ const Order = ({ handleSelectOrder, menus, order, selected }) => {
 
             <Text style = {{ fontSize: '1.5rem' }}> Realizado a las: { onlyTime(order.orderDate) } </Text>
             <Text style = {{ fontSize: '1.5rem' }}> Entrega estimada: { addWaitingTime(order.orderDate, 1) } </Text>
-            <Text style = {{ fontSize: '1.5rem' }}> Precio: ${ stringifyPrice(calculateOrderPrice(menus, order.content)) } </Text>
+            <Text style = {{ fontSize: '1.5rem' }}> Precio: ${ stringifyPrice(calculateOrderPrice(products, order.content)) } </Text>
         </Card>
     )
 }

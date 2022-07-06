@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 
 import { Grid, Group, List, Text, Title } from '@mantine/core'
 
 import styled from 'styled-components';
 
 import Order from './Order';
+
+import { ProductContext } from '../../context/product/ProductContext';
 
 const StyledTitle = styled(Title)`
     display: flex;
@@ -23,7 +25,10 @@ const StyledTitle = styled(Title)`
     }
 `
 
-const Orders = ({ menus, orders, users }) => {
+const Orders = ({ orders, users }) => {
+
+    const { products } = useContext(ProductContext);
+
     const [selectedOrder, setSelectedOrder] = useState(null)
     const [orderingUser, setOrderingUser] = useState(null)
 
@@ -41,7 +46,7 @@ const Orders = ({ menus, orders, users }) => {
                 <Group direction = 'column'>
                     {   
                         orders.map(order =>
-                            <Order key = { order.id } menus = { menus } order = { order } handleSelectOrder = {handleSelectOrder}/>
+                            <Order key = { order.id } order = { order } handleSelectOrder = {handleSelectOrder}/>
                         )
                     }
                 </Group>
@@ -61,7 +66,7 @@ const Orders = ({ menus, orders, users }) => {
                                     selectedOrder.content.map(item =>  
                                             <List.Item key = { item }>
                                                 {
-                                                    menus.filter(menu => menu.id === item).map(menu => menu.name)
+                                                    products.filter(product => product._id === item).map(product => product.name)
                                                 }
                                             </List.Item>
                                     )
