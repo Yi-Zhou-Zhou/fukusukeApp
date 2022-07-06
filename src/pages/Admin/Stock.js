@@ -1,97 +1,118 @@
-import React, { useState } from 'react'
-import { useParams } from "react-router-dom"
+import React, { useState, useEffect, useContext } from "react";
+import { useParams } from "react-router-dom";
 
-import ItemCard from './ItemCard';
+import ItemCard from "./ItemCard";
 
-import { Card, Grid } from '@mantine/core';
+import { Card, Grid } from "@mantine/core";
 
-import styled from 'styled-components'
-import CreateMenuModal from './CreateMenuModal';
+import styled from "styled-components";
+import CreateMenuModal from "./CreateMenuModal";
+
+import { productApi } from "../../api/Api";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { ProductContext } from "../../context/product/ProductContext";
 
 const myCard = ({ className, children }) => {
-    return(
-        <Card className = { className }>
-            { children }
-        </Card>
-    )
-}
+	return <Card className={className}>{children}</Card>;
+};
 
 const MyCardStyled = styled(myCard)`
-    position: relative;
-    margin: 1rem;
-    width: 18rem;
-    padding: 0;
-    border: 3px dashed black;
-    background-color: transparent;
-`
+	position: relative;
+	margin: 1rem;
+	width: 18rem;
+	padding: 0;
+	border: 3px dashed black;
+	background-color: transparent;
+`;
 
 const AddMenuButton = styled.button`
-    height: 100%;
-    width: 100%;
-    background-color: transparent;
-    border: 0;
-    cursor: pointer;
+	height: 100%;
+	width: 100%;
+	background-color: transparent;
+	border: 0;
+	cursor: pointer;
 
-    &:after {
-        position: absolute;
-        top: calc(50% - .25rem);
-        left: calc(50% - 2.5rem);
-        height: .5rem;
-        width: 5rem;
- 
-        background-color: black;
-        content: "";
-        z-index: 0;
-    }
+	&:after {
+		position: absolute;
+		top: calc(50% - 0.25rem);
+		left: calc(50% - 2.5rem);
+		height: 0.5rem;
+		width: 5rem;
 
-    &:before {
-        position: absolute;
-        top: calc(50% - 2.5rem);
-        left: calc(50% - .25rem);
-        height: 5rem;
-        width: .5rem;
- 
-        background-color: black;
-        content: "";
-        z-index: 0;
-    }
-`
+		background-color: black;
+		content: "";
+		z-index: 0;
+	}
 
-const Stock = ({ menus }) => {
-    const [initialMenus, setInitialMenus] = useState(menus)
-    const [addModalOpened, setAddModalOpened] = useState(false)
+	&:before {
+		position: absolute;
+		top: calc(50% - 2.5rem);
+		left: calc(50% - 0.25rem);
+		height: 5rem;
+		width: 0.5rem;
 
-    const currentSection = useParams().selectedCategory
-    const menusToShow = !currentSection
-        ? initialMenus
-        : menus.filter(menu => menu.type === currentSection)
+		background-color: black;
+		content: "";
+		z-index: 0;
+	}
+`;
 
-    const byName = (menu1, menu2) => menu1.name.localeCompare(menu2.name)
-    const byCategory = (menu1, menu2) => menu1.type.localeCompare(menu2.type)
+const Stock = () => {
+	const navigate = useNavigate();
 
-    const byCategoryThenName = (menu1, menu2) => 
-        byCategory(menu1, menu2) || byName(menu1, menu2)
+	const { products, setProducts } = useContext(ProductContext);
 
-    return  (
-        <>
-            <CreateMenuModal 
-                addModalOpened = { addModalOpened }
-                setAddModalOpened = { setAddModalOpened }
-                initialMenus = { initialMenus }
-                setInitialMenus = { setInitialMenus }
-            />
-            <Grid>
-                <MyCardStyled>
-                    <AddMenuButton onClick = { () => setAddModalOpened(true) }>  </AddMenuButton>
-                </MyCardStyled>
-                {
-                    menusToShow.sort(byCategoryThenName).map(menu =>
-                        <ItemCard key = { menu.name } menu = { menu } initialMenus = { initialMenus } setInitialMenus = { setInitialMenus } />
-                    )
-                }
-            </Grid>
-        </>
-    )
-}
+	const [addModalOpened, setAddModalOpened] = useState(false);
 
-export default Stock
+	const currentSection = useParams().selectedCategory;
+	const menusToShow = !currentSection
+		? products
+		: products.filter((product) => product.category === currentSection);
+
+	const byName = (product1, product2) =>
+		product1.name.localeCompare(product2.name);
+	const byCategory = (product1, product2) =>
+		product1.category.localeCompare(product2.category);
+
+	const byCategoryThenName = (product1, product2) =>
+		byCategory(product1, product2) || byName(product1, product2);
+
+	useEffect(() => {
+		const fetchProducts = async () => {
+			try {
+				const response = await axios.get(`${productApi}/`, {
+					headers: {
+						"x-auth-token": localStorage.getItem("token"),
+					},
+				});
+				setProducts(response.data);
+			} catch (error) {
+				// redirect to home
+				navigate("/");
+			}
+		};
+		fetchProducts();
+	}, []);
+
+	return (
+		<>
+			<CreateMenuModal
+				addModalOpened={addModalOpened}
+				setAddModalOpened={setAddModalOpened}
+			/>
+			<Grid>
+				<MyCardStyled>
+					<AddMenuButton onClick={() => setAddModalOpened(true)}>
+						{" "}
+					</AddMenuButton>
+				</MyCardStyled>
+				{menusToShow.sort(byCategoryThenName).map((product) => (
+					<ItemCard key={product.name} id={product._id} />
+				))}
+			</Grid>
+		</>
+	);
+};
+
+export default Stock;
