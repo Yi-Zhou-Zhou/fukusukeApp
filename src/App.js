@@ -18,25 +18,30 @@ import Stock from './pages/Admin/Stock';
 import Greeting from './pages/Home/Greeting';
 import Catalog from './pages/User/Catalog';
 
-const App = ({ menus, orders, users }) => {
+// Context
+import { ProductProvider } from "./context/product/ProductContext";
+
+const App = ({ orders, users }) => {
     return (
-        <Router>
-            <Routes>
-                <Route path="/admin" element = { <AdminHome /> } >
-                    <Route index element = {<AdminGreeting orders = { orders } />} />
-                    <Route path = "pedidos" element = { <Orders menus = { menus } orders = { orders } users = { users } /> } />
-                    <Route path = "productos" element = { <Stock menus = { menus} /> } >
-                        <Route path=":selectedCategory" element = { <Stock menus = { menus} /> } />
+        <ProductProvider>
+            <Router>
+                <Routes>
+                    <Route path="/admin" element = { <AdminHome /> } >
+                        <Route index element = {<AdminGreeting orders = { orders } />} />
+                        <Route path = "pedidos" element = { <Orders orders = { orders } users = { users } /> } />
+                        <Route path = "productos" element = { <Stock /> } >
+                            <Route path=":selectedCategory" element = { <Stock /> } />
+                        </Route>
                     </Route>
-                </Route>
 
-                <Route path="/" element={<Home/>} >
-                    <Route index element = { <Greeting/> } />
-                    <Route path = "catalogo" element = { <Catalog menus = { menus } /> } />
-                </Route>
+                    <Route path="/" element={<Home/>} >
+                        <Route index element = { <Greeting/> } />
+                        <Route path = "catalogo" element = { <Catalog /> } />
+                    </Route>
 
-            </Routes>
-        </Router>
+                </Routes>
+            </Router>
+        </ProductProvider>
   );
 }
 
