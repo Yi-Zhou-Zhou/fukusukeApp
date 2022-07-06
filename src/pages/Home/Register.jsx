@@ -3,24 +3,25 @@ import { Group, Modal, PasswordInput, Select, TextInput } from "@mantine/core";
 import "dayjs/locale/es-mx";
 import { DatePicker } from "@mantine/dates";
 import axios from "axios";
-
+import { Text } from "@mantine/core";
 import usePasswordSecurityValidation from "../../hooks/usePasswordSecurityValidation";
 // import regions json
 import regionsData from "../../json/regiones-provincias-comunas.json";
 
 function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
-	const [credentials, setCredentials] = useState({
-		run: "",
-		name: "",
-		address: "",
-		commune: "",
-		province: "",
-		region: "",
-		birthday: "",
-		sex: "",
-		email: "",
-		phone: "",
-	});
+    const [formError, setError] = useState("")
+    const [credentials, setCredentials] = useState({
+        run: "",
+        name: "",
+        address: "",
+        commune: "",
+        province: "",
+        region: "",
+        birthday: "",
+        sex: "",
+        email: "",
+        phone: "",
+    });
 
 	const [password, setPassword, passwordValid] =
 		usePasswordSecurityValidation();
@@ -30,53 +31,52 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
 	const [provinces, setProvinces] = useState([]);
 	const [communes, setCommunes] = useState([]);
 
-	const [invalidEmailError, setInvalidEmailError] = useState(false);
-	const [emailAlreadyExists, setEmailAlreadyExists] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
 
 	const handleChange = (e) => {
 		setCredentials({ ...credentials, [e.target.name]: e.target.value });
 	};
 
-	async function registerUser(e) {
-		e.preventDefault();
-		if (!passwordValid) {
-			return;
-		}
-		if (password !== confirmPassword) {
-			return;
-		}
-		// register user
-		console.log(credentials);
-		try {
-			const { data } = await axios.post(
-				"http://localhost:8080/register",
-				{
-					...credentials,
-					password: password,
-					role: "client",
-				}
-			);
-			console.log(data);
-			// setOpenedSignUp(false);
-			// setOpenedSignIn(true);
-		} catch (error) {
-			if (error.response) {
-				// The request was made and the server responded with a status code
-				console.log(error.response.data.message);
-				if (error.response.data.message === "User already exists") {
-					setEmailAlreadyExists(true);
-				} else if (error.response.data.message === "Invalid email") {
-					setInvalidEmailError(true);
-				}
-			} else if (error.request) {
-				// The request was made but no response was received
-				console.log(error.request);
-			} else {
-				// Something happened in setting up the request that triggered an Error
-				console.log("Error", error.message);
-			}
-		}
-	}
+    async function registerUser(e) {
+        e.preventDefault();
+        setIsSubmit(true);
+        if (!passwordValid) {
+            return;
+        }
+        if (password !== confirmPassword) {
+            return;
+        }
+        
+        setError({...formError, password: ""})
+        
+        console.log(formError)
+        // register user
+        console.log(credentials);
+        try {
+            const { data } = await axios.post(
+                "http://localhost:8080/register",    
+                {
+                    ...credentials,
+                    password: password,
+                    role: "client",
+                }
+            );
+            
+            // setOpenedSignUp(false);
+            // setOpenedSignIn(true);
+        } catch (error) {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                setEmailErrorMessage(error.response.data.message);
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.log(error.request);
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.log("Error", error.message);
+            }
+        }
+    }
 
 	useEffect(() => {
 		// update provinces
@@ -102,59 +102,58 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
 		setCredentials({ ...credentials, commune: "" });
 	}, [credentials.province]);
 
-	return (
-		<Modal
-			styles={{
-				title: {
-					fontSize: "34px",
-					marginBottom: "1rem",
-					letterSpacing: "1.2px",
-					fontWeight: "700",
-				},
-			}}
-			centered
-			opened={openedSignUp}
-			onClose={() => setOpenedSignUp(false)}
-			transition="fade"
-			transitionDuration={400}
-			position="center"
-			title="Registrarse"
-			size="lg"
-		>
-			<form className="form" onSubmit={registerUser}>
-				<Group direction="row" grow>
-					<TextInput
-						placeholder="Nombre Completo *"
-						name="name"
-						required
-						onChange={handleChange}
-					/>
+    return (
+        <Modal
+            styles={{
+                title: {
+                    fontSize: "34px",
+                    marginBottom: "1rem",
+                    letterSpacing: "1.2px",
+                    fontWeight: "700",
+                },
+            }}
+            centered
+            opened={openedSignUp}
+            onClose={() => {
+                setOpenedSignUp(false);
+                setError("");
+            }}
+            transition="fade"
+            transitionDuration={400}
+            position="center"
+            title="Registrarse"
+            size="lg"
+        >
+            <form className="form" onSubmit={registerUser}>
+                <Group direction="row" grow>
+                    <TextInput
+                        placeholder="Nombre Completo *"
+                        name="name"
+                        required
+                        onChange={handleChange}
+                    />
 
-					<TextInput
-						placeholder="RUN *"
-						name="run"
-						onChange={handleChange}
-						required
-					/>
-				</Group>
+                    <TextInput
+                        placeholder="RUN *"
+                        name="run"
+                        onChange={handleChange}
+                        required
+                        onInvalid={e => e.target.setCustomValidity("El Nombre es obligatorio")}
+                        onInput={e => e.target.setCustomValidity('')}
+                    />
+                </Group>
 
-				<Group grow>
-					<TextInput
-						placeholder="Ingrese su correo electrónico"
-						name="email"
-						onChange={handleChange}
-						required
-						onInput={() => {
-							setInvalidEmailError(false);
-							setEmailAlreadyExists(false);
-						}}
-						error={
-							(invalidEmailError &&
-								"El correo electrónico no es válido") ||
-							(emailAlreadyExists &&
-								"Ya existe un usuario con este correo electrónico")
-						}
-					/>
+                <Group grow>
+                    <TextInput
+                        placeholder="Ingrese su correo electrónico"
+                        name="email"
+                        onChange={handleChange}
+                        required
+                        onInput={() => {
+                            setEmailErrorMessage("");
+                        }}
+                        error={emailErrorMessage}
+                    />
 
 					<TextInput
 						placeholder="Celular *"
@@ -191,31 +190,31 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
 					required
 				/>
 
-				<Group grow>
-					<Select
-						name="region"
-						placeholder="Seleccione región"
-						required
-						value={credentials.region}
-						onChange={(newValue) =>
-							setCredentials({ ...credentials, region: newValue })
-						}
-						data={regionsData.map((region) => region.region)}
-					/>
-
-					<Select
-						name="province"
-						placeholder="Seleccione provincia"
-						required
-						value={credentials.province}
-						onChange={(newValue) =>
-							setCredentials({
-								...credentials,
-								province: newValue,
-							})
-						}
-						data={provinces.map((province) => province.name)}
-					/>
+                <Group grow>
+                    <Select
+                        name="region"
+                        placeholder="Seleccione región"
+                        required
+                        value={credentials.region}
+                        onChange={(newValue) =>
+                            setCredentials({ ...credentials, region: newValue })
+                        }
+                        data={regionsData.map((region) => region.region)}
+                    />
+                    
+                    <Select
+                        name="province"
+                        placeholder="Seleccione provincia"
+                        required
+                        value={credentials.province}
+                        onChange={(newValue) =>
+                            setCredentials({
+                                ...credentials,
+                                province: newValue,
+                            })
+                        }
+                        data={provinces.map((province) => province.name)}
+                    />
 
 					<Select
 						name="commune"

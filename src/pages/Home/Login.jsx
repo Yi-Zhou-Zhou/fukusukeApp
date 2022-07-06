@@ -1,9 +1,15 @@
 import React, { useState } from "react";
-import { Modal } from "@mantine/core";
+import { Modal, PasswordInput, TextInput } from "@mantine/core";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function Login({ openedSignIn, setOpenedSignIn, setOpenedSignUp }) {
+    const [formError, setError] = useState({
+        password: "",
+        email: "",
+    }); 
+
+
     const navigate = useNavigate();
     const [credentials, setCredentials] = useState({});
     const handleChange = (e) => {
@@ -29,6 +35,10 @@ function Login({ openedSignIn, setOpenedSignIn, setOpenedSignUp }) {
             else if (userType === "admin") navigate("/admin");
         } catch (error) {
             console.log(error.response.data.err.message);
+            if (error.response.data.err.message.includes("correo")) setError({...formError, email: error.response.data.err.message})
+            else setError({...formError, password: error.response.data.err.message, email: ""})
+
+            
         }
     };
 
@@ -51,30 +61,24 @@ function Login({ openedSignIn, setOpenedSignIn, setOpenedSignUp }) {
             title="Iniciar Sesión"
         >
             <form className="form">
-                <div className="input-field">
-                    <input
-                        type="text"
-                        className="form-input"
-                        placeholder=" "
-                        name="email"
-                        onChange={handleChange}
-                    />
-                    <label htmlFor="" className="form-label">
-                        Correo electrónico
-                    </label>
-                </div>
-                <div className="input-field">
-                    <input
-                        type="password"
-                        className="form-input"
-                        placeholder=" "
-                        name="password"
-                        onChange={handleChange}
-                    />
-                    <label htmlFor="" className="form-label">
-                        Contraseña
-                    </label>
-                </div>
+                <TextInput
+                    name="email"
+                    label="Correo Electrónico"
+                    value={credentials.email}
+                    onInput={() => setError({...formError, email: ""})}
+                    onChange={handleChange}
+                    error={formError.email}
+                />
+
+                <PasswordInput
+                    name="password"
+                    label="Contraseña"
+                    value={credentials.password}
+                    onInput={() => setError({...formError, password: ""})}
+                    onChange={handleChange}
+                    error={formError.password}
+                />
+
                 <button className="form-button" onClick={handleLogin}>
                     Ingresar
                 </button>
