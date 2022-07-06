@@ -1,7 +1,6 @@
 import './App.css';
 
 import { 
-    Navigate,
     BrowserRouter as Router,
     Route,
     Routes
@@ -12,18 +11,19 @@ import Home from './pages/Home/Home';
 
 // Admin view
 import AdminHome from './pages/Admin/AdminHome'
-import Greeting from './pages/Admin/Greeting'
+import AdminGreeting from './pages/Admin/AdminGreeting'
 import Orders from './pages/Admin/Orders';
 import Stock from './pages/Admin/Stock';
-import User from './pages/User/User';
 
+import Greeting from './pages/Home/Greeting';
+import Catalog from './pages/User/Catalog';
 
 const App = ({ menus, orders, users }) => {
     return (
         <Router>
             <Routes>
                 <Route path="/admin" element = { <AdminHome /> } >
-                    <Route index element = {<Greeting orders = { orders } />} />
+                    <Route index element = {<AdminGreeting orders = { orders } />} />
                     <Route path = "pedidos" element = { <Orders menus = { menus } orders = { orders } users = { users } /> } />
                     <Route path = "productos" element = { <Stock menus = { menus} /> } >
                         <Route path=":selectedCategory" element = { <Stock menus = { menus} /> } />
@@ -31,7 +31,8 @@ const App = ({ menus, orders, users }) => {
                 </Route>
 
                 <Route path="/" element={<Home/>} >
-
+                    <Route index element = { <Greeting/> } />
+                    <Route path = "catalogo" element = { <Catalog menus = { menus } /> } />
                 </Route>
 
             </Routes>
