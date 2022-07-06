@@ -5,6 +5,7 @@ import { DatePicker } from "@mantine/dates";
 import axios from "axios";
 import { Text } from "@mantine/core";
 import usePasswordSecurityValidation from "../../hooks/usePasswordSecurityValidation";
+import { userApi } from "../../api/Api";
 // import regions json
 import regionsData from "../../json/regiones-provincias-comunas.json";
 
@@ -52,14 +53,11 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
 		// register user
 		console.log(credentials);
 		try {
-			const { data } = await axios.post(
-				"http://localhost:8080/register",
-				{
-					...credentials,
-					password: password,
-					role: "client",
-				}
-			);
+			const { data } = await axios.post(`${userApi}/register`, {
+				...credentials,
+				password: password,
+				role: "client",
+			});
 
 			// setOpenedSignUp(false);
 			// setOpenedSignIn(true);
