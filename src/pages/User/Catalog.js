@@ -2,12 +2,10 @@ import React, { useState, useContext } from "react";
 
 import { ProductContext } from "../../context/product/ProductContext";
 import { Badge, Button, Card, Container, Grid, Group, Image, Title, Text } from "@mantine/core";
-import { LoremIpsum } from 'react-lorem-ipsum';
 
 import stringifyPrice from '../../functions/common/stringifyPrice';
 
 const Catalog = () => {
-
     const { products } = useContext(ProductContext);
 
     return(
@@ -29,7 +27,7 @@ const Catalog = () => {
                             </Card.Section>
 
                             <div style = {{ display: 'flex', margin: '1rem 0 0 0', justifyContent: 'space-between' }}>
-                                <div>
+                                <div style = {{ width: '12rem' }}>
                                     <Title order = {2} style = {{ fontSize: '1.125rem' }}> { product.name } </Title>
 
                                     <Text> 
