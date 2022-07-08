@@ -14,6 +14,7 @@ import AdminHome from './pages/Admin/AdminHome'
 import AdminGreeting from './pages/Admin/AdminGreeting'
 import Orders from './pages/Admin/Orders';
 import Stock from './pages/Admin/Stock';
+import Users from "./pages/Admin/Users";
 
 import Greeting from './pages/Home/Greeting';
 import Catalog from './pages/User/Catalog';
@@ -31,6 +32,9 @@ const App = ({ orders, users }) => {
                         <Route path = "pedidos" element = { <Orders orders = { orders } users = { users } /> } />
                         <Route path = "productos" element = { <Stock /> } >
                             <Route path=":selectedCategory" element = { <Stock /> } />
+                        </Route>
+                        <Route path = "usuarios" element = { <Users /> } >
+                            <Route path=":selectedCategory" element = { <Users /> } />
                         </Route>
                     </Route>
 

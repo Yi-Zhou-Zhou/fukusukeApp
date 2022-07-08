@@ -68,12 +68,13 @@ const AppShellHeader = () => {
             <FlexDiv>
                 <StyledLink  text = "Pedidos" route = 'pedidos' />
                 <StyledLink  text = "Productos" route = 'productos' />
+                <StyledLink  text = "Usuarios" route = 'usuarios' />
             </FlexDiv>
         </Header>
     )
 }
 
-const AppShellNav = ({ currentSection }) => {
+const AppShellProductNav = ({ currentSection }) => {
     return(
         <Navbar
             width = {{ base: 180 }}
@@ -92,6 +93,25 @@ const AppShellNav = ({ currentSection }) => {
     )
 }
 
+const AppShellUserNav = ({ currentSection }) => {
+    return(
+        <Navbar
+            width = {{ base: 180 }}
+            p = "xs"
+            styles = {{ root: { backgroundColor: 'black' }}}
+            fixed
+        >
+            <FlexDiv column >
+                <StyledLink text = "Todos" route = 'usuarios/' active = { !currentSection } />
+                <StyledLink text = "Clientes" route = 'usuarios/clientes' active = { currentSection === 'clientes' ? 1 : 0 } />
+                <StyledLink text = "Administradores" route = 'usuarios/administradores' active = { currentSection === 'administradores' ? 1 : 0 } />
+                <StyledLink text = "Cajeros" route = 'usuarios/cajeros' active = { currentSection === 'cajeros' ? 1 : 0 } />
+                <StyledLink text = "Repartidores" route = 'usuarios/repartidores' active = { currentSection === 'repartidores' ? 1 : 0 } />
+            </FlexDiv>
+        </Navbar>
+    )
+};
+
 const AdminHome = () => {
     const currentSection = useParams().selectedCategory
     const [currentNavbar, setCurrentNavbar] = useState(null)
@@ -102,7 +122,9 @@ const AdminHome = () => {
         if(loc.pathname.split("/")[2] === "pedidos"){
             setCurrentNavbar(null)
         } else if(loc.pathname.split("/")[2] === "productos") {
-            setCurrentNavbar(<AppShellNav currentSection = { currentSection } />)
+            setCurrentNavbar(<AppShellProductNav currentSection = { currentSection } />)
+        } else if(loc.pathname.split("/")[2] === "usuarios") {
+            setCurrentNavbar(<AppShellUserNav currentSection = { currentSection } />)
         }
     }, [loc]);
 
