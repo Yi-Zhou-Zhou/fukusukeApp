@@ -1,15 +1,39 @@
-import React, { useState, useContext } from "react";
+import React, { useContext, useState } from "react";
+
+import AddItemNotification from "./AddItemNotification";
+import ShoppingCart from "../User/ShoppingCart";
 
 import { ProductContext } from "../../context/product/ProductContext";
-import { Badge, Button, Card, Container, Grid, Group, Image, Title, Text } from "@mantine/core";
+import { Badge, Button, Card, Container, Grid, Image, Title, Text } from "@mantine/core";
 
 import stringifyPrice from '../../functions/common/stringifyPrice';
 
-const Catalog = () => {
+const Catalog = ({ cart, setCart, openedCart, setOpenedCart }) => {
     const { products } = useContext(ProductContext);
+
+    const [showAddNotification, setShowAddNotification] = useState(false)
+
+    const handleAddProduct = ( itemObject ) => {
+        const newCart = cart.concat(itemObject)
+
+        setCart(newCart)
+
+        setShowAddNotification(true)
+
+        setTimeout(() => {
+            setShowAddNotification(false)
+        }, 5000)
+    }
 
     return(
         <Container size = 'lg'>
+            <ShoppingCart
+                cart = { cart }
+                setCart = { setCart }
+                openedCart = { openedCart }
+                setOpenedCart = { setOpenedCart }
+            />
+
             <Grid>
             {
                 products.map(product => 
@@ -41,7 +65,10 @@ const Catalog = () => {
                                         <Button 
                                             compact
                                             style = {{ borderRadius: '5px 0 0 5px'}}
-                                        > Agregar </Button>
+                                            onClick = { () => handleAddProduct(product) }
+                                        >
+                                            Agregar 
+                                        </Button>
                                         <Badge style = {{ height: '100%', borderRadius: '0 5px 5px 0' }}radius = 'xs'>
                                             { product.stock }   
                                         </Badge>
@@ -53,6 +80,8 @@ const Catalog = () => {
                 )
             }
             </Grid>
+
+            <AddItemNotification opened = { showAddNotification } />
         </Container>
     )
 }

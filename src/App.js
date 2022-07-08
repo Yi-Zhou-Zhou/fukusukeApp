@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import './App.css';
 
 import { 
@@ -23,6 +25,9 @@ import Catalog from './pages/User/Catalog';
 import { ProductProvider } from "./context/product/ProductContext";
 
 const App = ({ orders, users }) => {
+    const [openedCart, setOpenedCart] = useState(false)
+    const [cart, setCart] = useState([])
+
     return (
         <ProductProvider>
             <Router>
@@ -38,9 +43,9 @@ const App = ({ orders, users }) => {
                         </Route>
                     </Route>
 
-                    <Route path="/" element={<Home/>} >
+                    <Route path="/" element={<Home openedCart = { openedCart } setOpenedCart = { setOpenedCart }/>} >
                         <Route index element = { <Greeting/> } />
-                        <Route path = "catalogo" element = { <Catalog /> } />
+                        <Route path = "catalogo" element = { <Catalog cart = { cart } setCart = { setCart } openedCart = { openedCart } setOpenedCart = { setOpenedCart } /> } />
                     </Route>
 
                 </Routes>

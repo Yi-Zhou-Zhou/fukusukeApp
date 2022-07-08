@@ -13,7 +13,6 @@ import { GoLocation } from "react-icons/go";
 import pdf from "../../pdf/Carta.pdf";
 import Login from "./Login";
 import Register from "./Register";
-import ShoppingCart from "../User/ShoppingCart";
 
 const HomeHeader = ({ setOpenedSignIn, handleOpenCart }) => {
     return(
@@ -59,15 +58,13 @@ const HomeHeader = ({ setOpenedSignIn, handleOpenCart }) => {
     )
 }
 
-const Home = () => {
+const Home = ({ openedCart, setOpenedCart }) => {
     const handleOpenCart = () => {
         openedCart ? setOpenedCart(false) : setOpenedCart(true);
     };
 
     const [openedSignUp, setOpenedSignUp] = useState(false)
     const [openedSignIn, setOpenedSignIn] = useState(false)
-
-    const [openedCart, setOpenedCart] = useState(false)
 
     return (
         <AppShell
@@ -86,11 +83,6 @@ const Home = () => {
                 openedSignUp={openedSignUp}
                 setOpenedSignUp={setOpenedSignUp}
                 setOpenedSignIn={setOpenedSignIn}
-            />
-
-            <ShoppingCart
-                openedCart = { openedCart }
-                setOpenedCart = { setOpenedCart }
             />
 
             <Outlet/>
