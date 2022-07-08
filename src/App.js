@@ -22,19 +22,27 @@ import Catalog from './pages/User/Catalog';
 // Context
 import { ProductProvider } from "./context/product/ProductContext";
 
+// Role Users Validation
+
+import AdminProtectedRoute from './pages/AdminProtectedRoute';
+import UserProtectedRoute from './pages/UserProtectedRoute';
+
+
 const App = ({ orders, users }) => {
     return (
         <ProductProvider>
             <Router>
                 <Routes>
-                    <Route path="/admin" element = { <AdminHome /> } >
-                        <Route index element = {<AdminGreeting orders = { orders } />} />
-                        <Route path = "pedidos" element = { <Orders orders = { orders } users = { users } /> } />
-                        <Route path = "productos" element = { <Stock /> } >
-                            <Route path=":selectedCategory" element = { <Stock /> } />
-                        </Route>
-                        <Route path = "usuarios" element = { <Users /> } >
-                            <Route path=":selectedCategory" element = { <Users /> } />
+                    <Route element={<AdminProtectedRoute/>} >
+                        <Route path="/admin" element = { <AdminHome /> } >
+                            <Route index element = {<AdminGreeting orders = { orders } />} />
+                            <Route path = "pedidos" element = { <Orders orders = { orders } users = { users } /> } />
+                            <Route path = "productos" element = { <Stock /> } >
+                                <Route path=":selectedCategory" element = { <Stock /> } />
+                            </Route>
+                            <Route path = "usuarios" element = { <Users /> } >
+                                <Route path=":selectedCategory" element = { <Users /> } />
+                            </Route>
                         </Route>
                     </Route>
 
