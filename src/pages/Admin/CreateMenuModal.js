@@ -4,7 +4,7 @@ import { Modal } from '@mantine/core'
 
 import styled from 'styled-components'
 
-
+import { Select,Input, Button } from '@mantine/core'
 import { ProductContext } from '../../context/product/ProductContext'
 
 const MyGrid = styled.div`
@@ -68,7 +68,16 @@ const CreateMenuModal = ({ addModalOpened, setAddModalOpened, initialMenus, setI
         <Modal
             opened = { addModalOpened }
             onClose = {() => setAddModalOpened(false)}
-            title = "Agregar un nuevo menu"
+            title = "Agregar un nuevo producto"
+            styles={{
+				title: {
+					fontSize: "26px",
+					marginBottom: "1rem",
+					letterSpacing: "1.2px",
+					fontWeight: "600",
+				},
+			}}
+			ce
         >
             <form onSubmit = { handleNewMenuSubmit }>
                 <MyGrid>
@@ -76,15 +85,15 @@ const CreateMenuModal = ({ addModalOpened, setAddModalOpened, initialMenus, setI
                         Nombre:
                     </label>
                     <div>
-                        <input
-                            style = {{ width: '100%' }}
-                            type = "text"
-                            value = { newMenuName }
-                            onChange = { handleNewMenuNameChange }
+                            <Input
+                                placeholder="Nombre del producto"
+                                type={"text"}
+                                value={newMenuName}
+                                onChange = { handleNewMenuNameChange }
                         />
                         {
-                            nameError
-                            ? <p style = {{ color: "red" }}> Debe ingresar el nombre del menú </p>
+                            priceError
+                            ? <p style = {{ color: "red" }}> Debe ingresar el nombre del producto </p>
                             : null
                         }
                     </div>
@@ -94,15 +103,15 @@ const CreateMenuModal = ({ addModalOpened, setAddModalOpened, initialMenus, setI
                     </label>
 
                     <div>
-                        <input
-                            style = {{ width: '100%' }}
-                            type = "text"
-                            value = { newMenuPrice }
-                            onChange = { handleNewMenuPriceChange }
+                            <Input
+                                placeholder="Precio del producto"
+                                type={"text"}
+                                value={newMenuPrice}
+                                onChange = { handleNewMenuPriceChange }
                         />
                         {
                             priceError
-                            ? <p style = {{ color: "red" }}> Debe ingresar el precio del menú </p>
+                            ? <p style = {{ color: "red" }}> Debe ingresar el precio del producto! </p>
                             : null
                         }
                     </div>
@@ -110,21 +119,33 @@ const CreateMenuModal = ({ addModalOpened, setAddModalOpened, initialMenus, setI
                     <label>
                         Tipo de menu:
                     </label>
-                    <select
-                        value = { newMenuType }
+                    <Select
+                        placeholder="Escoja tipo de menú"
+                        defaultValue={"tablas"}
                         onChange = { handleNewMenuTypeChange }
-                    >
-                        <option value = "tablas"> Tablas </option>
-                        <option value = "entradas"> Entradas </option>
-                        <option value = "gohan"> Gohan </option>
-                        <option value = "ramen"> Ramen </option>
-                    </select>
+                        data={[
+                            { value: 'tablas', label: 'Tablas' },
+                            { value: 'entradas', label: 'Entradas' },
+                            { value: 'gohan', label: 'Gohan' },
+                            { value: 'ramen', label: 'Ramen' },
+                        ]}
+                    />
 
                 </MyGrid>
+                
+                <Button       styles={(theme) => ({
+        root: {
+          border: 0,
+          height: 36,
+          marginTop: "2rem",
+            backgroundColor: "#bf0202",
 
-                <button style = {{ marginTop: '1rem' }} type = "submit">
+          '&:hover': {
+            backgroundColor: "#a30202",
+          },
+                }})} type="submit" color={"#bf0202"}>
                     Agregar
-                </button>
+                    </Button>
             </form>
         </Modal>
     )
