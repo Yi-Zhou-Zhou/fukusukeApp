@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../../context/user/UserContext";
 import { usePagination, useSortBy, useTable, useFilters } from "react-table";
+import { Table } from "@mantine/core";
 
 const mapRouteToFilterName = (route) => {
 	switch (route) {
@@ -18,7 +19,7 @@ const mapRouteToFilterName = (route) => {
 	}
 };
 
-const Table = ({ users }) => {
+const UsersTable = ({ users }) => {
 	const columns = useMemo(
 		() => [
 			{
@@ -96,7 +97,7 @@ const Table = ({ users }) => {
 
 	return (
 		<>
-			<table {...getTableProps()}>
+			<Table {...getTableProps()}>
 				<thead>
 					{headerGroups.map((headerGroup) => (
 						<tr {...headerGroup.getHeaderGroupProps()}>
@@ -142,7 +143,7 @@ const Table = ({ users }) => {
 						);
 					})}
 				</tbody>
-			</table>
+			</Table>
 			<div>
 				<button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
 					{"<<"}
@@ -214,7 +215,7 @@ function Users() {
 	return (
 		<>
 			{filterName}
-			<Table users={filteredUsers} />
+			<UsersTable users={filteredUsers} />
 		</>
 	);
 }
