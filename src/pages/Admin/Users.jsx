@@ -145,11 +145,11 @@ const Table = ({ users }) => {
 					Pagina{" "}
 					<strong>
 						{pageIndex + 1}
-						{" of "}
+						{" de "}
 						{pageCount}
 					</strong>
 				</span>
-				<span>
+				<span style={{ marginLeft: "10px" }}>
 					Mostrando{" "}
 					<strong>
 						{pageSize}
