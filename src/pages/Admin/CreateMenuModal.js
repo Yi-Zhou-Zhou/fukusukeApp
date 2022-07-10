@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 
 import { Modal } from '@mantine/core'
 
 import styled from 'styled-components'
+
+
+import { ProductContext } from '../../context/product/ProductContext'
 
 const MyGrid = styled.div`
     display: grid;
@@ -21,7 +24,7 @@ const CreateMenuModal = ({ addModalOpened, setAddModalOpened, initialMenus, setI
         setNewMenuPrice(event.target.value)
     }
 
-    const [newMenuType, setNewMenuType] = useState("Tablas")
+    const [newMenuType, setNewMenuType] = useState("tablas")
     const handleNewMenuTypeChange = (event) => {
         setNewMenuType(event.target.value)
     }
@@ -29,6 +32,7 @@ const CreateMenuModal = ({ addModalOpened, setAddModalOpened, initialMenus, setI
     const [nameError, setNameError] = useState(false)
     const [priceError, setPriceError] = useState(false)
 
+    const {addProduct} = useContext(ProductContext)
     const handleNewMenuSubmit = (event) => {
         event.preventDefault()
 
@@ -42,22 +46,21 @@ const CreateMenuModal = ({ addModalOpened, setAddModalOpened, initialMenus, setI
 
         if(newMenuName !== "" && newMenuPrice !== "")
         {
-            const newMenuId = Math.max(initialMenus.map(menu => menu.id).splice(-1)) + 1
-
-            const newMenu = {
-                id: newMenuId,
+            const newEl = {
                 name: newMenuName,
                 price: Number(newMenuPrice),
                 stock: 1,
-                type: newMenuType,
-                picture: "https://images.unsplash.com/photo-1615361200141-f45040f367be?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"
+                category: newMenuType,
+                picture: "https://images.unsplash.com/photo-1615361200141-f45040f367be?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80",
             }
-
-            setInitialMenus( initialMenus.concat(newMenu) )
-
             setNameError(false)
             setPriceError(false)
             setAddModalOpened(false)
+
+            //Add element function from Context
+            addProduct(newEl)
+
+            
         }
     }
 
@@ -111,10 +114,10 @@ const CreateMenuModal = ({ addModalOpened, setAddModalOpened, initialMenus, setI
                         value = { newMenuType }
                         onChange = { handleNewMenuTypeChange }
                     >
-                        <option value = "Tablas"> Tablas </option>
-                        <option value = "Entradas"> Entradas </option>
-                        <option value = "Gohan"> Gohan </option>
-                        <option value = "Ramen"> Ramen </option>
+                        <option value = "tablas"> Tablas </option>
+                        <option value = "entradas"> Entradas </option>
+                        <option value = "gohan"> Gohan </option>
+                        <option value = "ramen"> Ramen </option>
                     </select>
 
                 </MyGrid>

@@ -24,8 +24,8 @@ import { ProductProvider } from "./context/product/ProductContext";
 
 // Role Users Validation
 
-import AdminProtectedRoute from './pages/AdminProtectedRoute';
-import UserProtectedRoute from './pages/UserProtectedRoute';
+import AdminProtectedRoute from './pages/ProtectedRoutes/AdminProtectedRoute';
+import UserProtectedRoute from './pages/ProtectedRoutes/UserProtectedRoute';
 
 
 const App = ({ orders, users }) => {
