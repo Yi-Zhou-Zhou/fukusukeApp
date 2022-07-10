@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../../context/user/UserContext";
-import { usePagination, useSortBy, useTable } from "react-table";
+import { usePagination, useSortBy, useTable, useFilters } from "react-table";
 
 const mapRouteToFilterName = (route) => {
 	switch (route) {
@@ -45,6 +45,31 @@ const Table = ({ users }) => {
 		[]
 	);
 
+	function DefaultColumnFilter({
+		column: { filterValue, preFilteredRows, setFilter },
+	}) {
+		const count = preFilteredRows.length;
+
+		return (
+			<input
+				value={filterValue || ""}
+				onChange={(e) => {
+					setFilter(e.target.value || undefined);
+				}}
+				placeholder={`Buscar ${count} ${
+					count === 1 ? "registro" : "registros"
+				}`}
+			/>
+		);
+	}
+
+	const defaultColumn = useMemo(
+		() => ({
+			Filter: DefaultColumnFilter,
+		}),
+		[]
+	);
+
 	const {
 		getTableProps,
 		getTableBodyProps,
@@ -60,9 +85,11 @@ const Table = ({ users }) => {
 		nextPage,
 		previousPage,
 		setPageSize,
+		canFilter,
 		state: { pageIndex, pageSize },
 	} = useTable(
 		{ columns, data: users, initialState: { pageSize: 10 } },
+		useFilters,
 		useSortBy,
 		usePagination
 	);
@@ -87,6 +114,11 @@ const Table = ({ users }) => {
 												: " 🔼"
 											: ""}
 									</span>
+									{/* <div>
+										{column.canFilter
+											? column.render("Filter")
+											: null}
+									</div> */}
 								</th>
 							))}
 						</tr>
@@ -108,17 +140,6 @@ const Table = ({ users }) => {
 						);
 					})}
 				</tbody>
-				<tfoot>
-					{footerGroups.map((footerGroup) => (
-						<tr {...footerGroup.getFooterGroupProps()}>
-							{footerGroup.headers.map((column) => (
-								<td {...column.getFooterProps()}>
-									{column.render("Footer")}
-								</td>
-							))}
-						</tr>
-					))}
-				</tfoot>
 			</table>
 			<div>
 				<button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
