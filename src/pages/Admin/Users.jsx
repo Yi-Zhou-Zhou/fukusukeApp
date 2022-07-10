@@ -88,7 +88,7 @@ const Table = ({ users }) => {
 		canFilter,
 		state: { pageIndex, pageSize },
 	} = useTable(
-		{ columns, data: users, initialState: { pageSize: 10 } },
+		{ columns, data: users, defaultColumn, initialState: { pageSize: 10 } },
 		useFilters,
 		useSortBy,
 		usePagination
@@ -101,24 +101,26 @@ const Table = ({ users }) => {
 					{headerGroups.map((headerGroup) => (
 						<tr {...headerGroup.getHeaderGroupProps()}>
 							{headerGroup.headers.map((column) => (
-								<th
-									{...column.getHeaderProps(
-										column.getSortByToggleProps()
-									)}
-								>
-									{column.render("Header")}
-									<span>
-										{column.isSorted
-											? column.isSortedDesc
-												? " 🔽"
-												: " 🔼"
-											: ""}
-									</span>
-									{/* <div>
+								<th>
+									<div
+										{...column.getHeaderProps(
+											column.getSortByToggleProps()
+										)}
+									>
+										{column.render("Header")}
+										<span>
+											{column.isSorted
+												? column.isSortedDesc
+													? " 🔽"
+													: " 🔼"
+												: ""}
+										</span>
+									</div>
+									<div>
 										{column.canFilter
 											? column.render("Filter")
 											: null}
-									</div> */}
+									</div>
 								</th>
 							))}
 						</tr>
