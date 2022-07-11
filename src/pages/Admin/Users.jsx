@@ -2,8 +2,14 @@ import React, { useContext, useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../../context/user/UserContext";
 import { usePagination, useSortBy, useTable, useFilters } from "react-table";
-import { Table, Button } from "@mantine/core";
+import { Table, Button, Select, Group, TextInput } from "@mantine/core";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
+import {
+	HiChevronDoubleLeft,
+	HiChevronDoubleRight,
+	HiChevronLeft,
+	HiChevronRight,
+} from "react-icons/hi";
 import EditUser from "./EditUser";
 import DeleteUser from "./DeleteUser";
 
@@ -81,7 +87,7 @@ const UsersTable = ({ users, handleEdit, handleDelete }) => {
 		const count = preFilteredRows.length;
 
 		return (
-			<input
+			<TextInput
 				value={filterValue || ""}
 				onChange={(e) => {
 					setFilter(e.target.value || undefined);
@@ -173,27 +179,33 @@ const UsersTable = ({ users, handleEdit, handleDelete }) => {
 					})}
 				</tbody>
 			</Table>
-			<div>
-				<button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-					{"<<"}
-				</button>
-				<button
-					onClick={() => previousPage()}
+			<Group position="center" style={{ marginTop: "15px" }}>
+				<Button
+					onClick={() => gotoPage(0)}
+					variant="subtle"
+					leftIcon={<HiChevronDoubleLeft />}
 					disabled={!canPreviousPage}
-				>
-					{"<"}
-				</button>
-				<button onClick={() => nextPage()} disabled={!canNextPage}>
-					{">"}
-				</button>
-				<button
-					onClick={() => gotoPage(pageCount - 1)}
+				/>
+				<Button
+					onClick={() => previousPage()}
+					variant="subtle"
+					leftIcon={<HiChevronLeft />}
+					disabled={!canPreviousPage}
+				/>
+				<Button
+					onClick={() => nextPage()}
+					variant="subtle"
+					leftIcon={<HiChevronRight />}
 					disabled={!canNextPage}
-				>
-					{">>"}
-				</button>
-			</div>
-			<div>
+				/>
+				<Button
+					onClick={() => gotoPage(pageCount - 1)}
+					variant="subtle"
+					leftIcon={<HiChevronDoubleRight />}
+					disabled={!canNextPage}
+				/>
+			</Group>
+			<Group position="center" style={{ marginTop: "15px" }}>
 				<span>
 					Pagina{" "}
 					<strong>
@@ -211,20 +223,15 @@ const UsersTable = ({ users, handleEdit, handleDelete }) => {
 					</strong>
 				</span>
 				<span>
-					<select
+					<Select
 						value={pageSize}
-						onChange={(e) => {
-							setPageSize(Number(e.target.value));
-						}}
-					>
-						<option value={10}>10</option>
-						<option value={20}>20</option>
-						<option value={30}>30</option>
-						<option value={40}>40</option>
-						<option value={50}>50</option>
-					</select>
+						placeholder="10"
+						onChange={(value) => setPageSize(Number(value))}
+						style={{ marginLeft: "10px" }}
+						data={["10", "20", "30", "40", "50"]}
+					/>
 				</span>
-			</div>
+			</Group>
 		</>
 	);
 };
