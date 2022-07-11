@@ -54,6 +54,22 @@ const UsersTable = ({ users, handleEdit, handleDelete }) => {
 				accessor: "role",
 			},
 			{
+				Header: "Dirección",
+				accessor: "address",
+			},
+			{
+				Header: "Región",
+				accessor: "region",
+			},
+			{
+				Header: "Provincia",
+				accessor: "province",
+			},
+			{
+				Header: "Comuna",
+				accessor: "commune",
+			},
+			{
 				Header: "Editar",
 				accessor: "EditButton",
 				disableFilters: true,
