@@ -2,8 +2,10 @@ import React, { useContext, useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../../context/user/UserContext";
 import { usePagination, useSortBy, useTable, useFilters } from "react-table";
-import { Table } from "@mantine/core";
+import { Table, Button } from "@mantine/core";
+import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import EditUser from "./EditUser";
+import DeleteUser from "./DeleteUser";
 
 const mapRouteToFilterName = (route) => {
 	switch (route) {
@@ -20,7 +22,7 @@ const mapRouteToFilterName = (route) => {
 	}
 };
 
-const UsersTable = ({ users, handleSelect }) => {
+const UsersTable = ({ users, handleEdit, handleDelete }) => {
 	const columns = useMemo(
 		() => [
 			{
@@ -46,17 +48,29 @@ const UsersTable = ({ users, handleSelect }) => {
 			{
 				Header: "Editar",
 				accessor: "EditButton",
-				filterable: false,
-				sortable: false,
+				disableFilters: true,
+				disableSortBy: true,
 				Cell: ({ row }) => (
-					<button
-						onClick={() => handleSelect(row.original._id)}
-						className="btn btn-primary btn-sm"
-					>
-						Editar
-					</button>
-				)
-			}
+					<Button
+						onClick={() => handleEdit(row.original._id)}
+						leftIcon={<AiFillEdit />}
+						variant="subtle"
+					/>
+				),
+			},
+			{
+				Header: "Eliminar",
+				accessor: "DeleteButton",
+				disableFilters: true,
+				disableSortBy: true,
+				Cell: ({ row }) => (
+					<Button
+						onClick={() => handleDelete(row.original._id)}
+						leftIcon={<AiFillDelete />}
+						variant="subtle"
+					/>
+				),
+			},
 		],
 		[]
 	);
@@ -228,19 +242,40 @@ function Users() {
 	}, [users, filterName]);
 
 	const [editModalOpen, setEditModalOpen] = useState(false);
+	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 	const [userId, setUserId] = useState(null);
 
-	const handleSelectUser = (_id) => {
+	const handleEdit = (_id) => {
 		setUserId(_id);
 		setEditModalOpen(true);
-	}
+	};
+
+	const handleDelete = (_id) => {
+		setUserId(_id);
+		setDeleteModalOpen(true);
+	};
 
 	return (
 		<>
 			{editModalOpen && (
-				<EditUser _id={userId} open={editModalOpen} setOpen={setEditModalOpen} />
+				<EditUser
+					_id={userId}
+					open={editModalOpen}
+					setOpen={setEditModalOpen}
+				/>
 			)}
-			<UsersTable users={filteredUsers} handleSelect={handleSelectUser} />
+			{deleteModalOpen && (
+				<DeleteUser
+					_id={userId}
+					open={deleteModalOpen}
+					setOpen={setDeleteModalOpen}
+				/>
+			)}
+			<UsersTable
+				users={filteredUsers}
+				handleEdit={handleEdit}
+				handleDelete={handleDelete}
+			/>
 		</>
 	);
 }
