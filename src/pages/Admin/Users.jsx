@@ -4,6 +4,7 @@ import { UserContext } from "../../context/user/UserContext";
 import { usePagination, useSortBy, useTable, useFilters } from "react-table";
 import { Table, Button, Select, Group, TextInput } from "@mantine/core";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
+import { GrAddCircle } from "react-icons/gr";
 import {
 	HiChevronDoubleLeft,
 	HiChevronDoubleRight,
@@ -12,6 +13,7 @@ import {
 } from "react-icons/hi";
 import EditUser from "./EditUser";
 import DeleteUser from "./DeleteUser";
+import NewUser from "./NewUser";
 
 const mapRouteToFilterName = (route) => {
 	switch (route) {
@@ -250,6 +252,7 @@ function Users() {
 
 	const [editModalOpen, setEditModalOpen] = useState(false);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+	const [newModalOpen, setNewModalOpen] = useState(false);
 	const [userId, setUserId] = useState(null);
 
 	const handleEdit = (_id) => {
@@ -260,6 +263,10 @@ function Users() {
 	const handleDelete = (_id) => {
 		setUserId(_id);
 		setDeleteModalOpen(true);
+	};
+
+	const handleCreate = () => {
+		setNewModalOpen(true);
 	};
 
 	return (
@@ -278,6 +285,23 @@ function Users() {
 					setOpen={setDeleteModalOpen}
 				/>
 			)}
+			{newModalOpen && (
+				<NewUser
+					open={newModalOpen}
+					setOpen={setNewModalOpen}
+					role={filterName}
+				/>
+			)}
+			<div>
+				<Button
+					leftIcon={<GrAddCircle />}
+					variant="subtle"
+					size="xl"
+					onClick={handleCreate}
+				>
+					Nuevo usuario
+				</Button>
+			</div>
 			<UsersTable
 				users={filteredUsers}
 				handleEdit={handleEdit}
