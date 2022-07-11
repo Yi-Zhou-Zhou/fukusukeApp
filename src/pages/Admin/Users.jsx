@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { UserContext } from "../../context/user/UserContext";
 import { usePagination, useSortBy, useTable, useFilters } from "react-table";
 import { Table } from "@mantine/core";
+import EditUser from "./EditUser";
 
 const mapRouteToFilterName = (route) => {
 	switch (route) {
@@ -19,7 +20,7 @@ const mapRouteToFilterName = (route) => {
 	}
 };
 
-const UsersTable = ({ users }) => {
+const UsersTable = ({ users, handleSelect }) => {
 	const columns = useMemo(
 		() => [
 			{
@@ -42,6 +43,20 @@ const UsersTable = ({ users }) => {
 				Header: "Rol",
 				accessor: "role",
 			},
+			{
+				Header: "Editar",
+				accessor: "EditButton",
+				filterable: false,
+				sortable: false,
+				Cell: ({ row }) => (
+					<button
+						onClick={() => handleSelect(row.original._id)}
+						className="btn btn-primary btn-sm"
+					>
+						Editar
+					</button>
+				)
+			}
 		],
 		[]
 	);
@@ -212,10 +227,20 @@ function Users() {
 		return users;
 	}, [users, filterName]);
 
+	const [editModalOpen, setEditModalOpen] = useState(false);
+	const [userId, setUserId] = useState(null);
+
+	const handleSelectUser = (_id) => {
+		setUserId(_id);
+		setEditModalOpen(true);
+	}
+
 	return (
 		<>
-			{filterName}
-			<UsersTable users={filteredUsers} />
+			{editModalOpen && (
+				<EditUser _id={userId} open={editModalOpen} setOpen={setEditModalOpen} />
+			)}
+			<UsersTable users={filteredUsers} handleSelect={handleSelectUser} />
 		</>
 	);
 }
