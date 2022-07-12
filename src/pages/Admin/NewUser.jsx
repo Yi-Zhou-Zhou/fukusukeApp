@@ -1,15 +1,30 @@
-import React, { useState, useEffect } from "react";
-import { Group, Modal, PasswordInput, Select, TextInput } from "@mantine/core";
+import React, { useContext, useState, useMemo } from "react";
+import {
+	Modal,
+	TextInput,
+	Select,
+	Group,
+	Button,
+	PasswordInput,
+} from "@mantine/core";
 import "dayjs/locale/es-mx";
 import { DatePicker } from "@mantine/dates";
+import { UserContext } from "../../context/user/UserContext";
+import regionsData from "../../json/regiones-provincias-comunas.json";
+import { userApi } from "../../api/Api";
 import axios from "axios";
 import usePasswordSecurityValidation from "../../hooks/usePasswordSecurityValidation";
-import { userApi } from "../../api/Api";
-// import regions json
-import regionsData from "../../json/regiones-provincias-comunas.json";
 
-function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
+function NewUser({ role, open, setOpen }) {
+	const { users, addUser } = useContext(UserContext);
+
+	const [emailErrorMessage, setEmailErrorMessage] = useState("");
 	const [formError, setError] = useState("");
+
+	const [password, setPassword, passwordValid] =
+		usePasswordSecurityValidation();
+	const [confirmPassword, setConfirmPassword] = useState("");
+
 	const [credentials, setCredentials] = useState({
 		run: "",
 		name: "",
@@ -21,21 +36,43 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
 		sex: "",
 		email: "",
 		phone: "",
+		role: role,
 	});
 
-	const [password, setPassword, passwordValid] =
-		usePasswordSecurityValidation();
+	const provinces = useMemo(() => {
+		const newProvinces = regionsData.find(
+			(region) => credentials.region === region.region
+		)?.provincias;
 
-	const [confirmPassword, setConfirmPassword] = useState("");
+		// clear province and commune
+		setCredentials({ ...credentials, province: "", commune: "" });
 
-	const [provinces, setProvinces] = useState([]);
-	const [communes, setCommunes] = useState([]);
+		if (newProvinces) return newProvinces;
+		else return [];
+	}, [credentials.region]);
 
-	const [emailErrorMessage, setEmailErrorMessage] = useState("");
+	const communes = useMemo(() => {
+		const newCommunes = provinces.find(
+			(province) => credentials.province === province.name
+		)?.comunas;
+
+		// clear commune
+		setCredentials({ ...credentials, commune: "" });
+
+		if (newCommunes) return newCommunes;
+		else return [];
+	}, [credentials.province]);
 
 	const handleChange = (e) => {
 		setCredentials({ ...credentials, [e.target.name]: e.target.value });
 	};
+
+	const roleOptions = [
+		{ value: "admin", label: "Administrador" },
+		{ value: "client", label: "Cliente" },
+		{ value: "delivery", label: "Encargado de despacho" },
+		{ value: "cashier", label: "Cajero" },
+	];
 
 	async function registerUser(e) {
 		e.preventDefault();
@@ -46,20 +83,22 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
 			return;
 		}
 
-		setError({ ...formError, password: "" });
+		if (!credentials.role) {
+			setError({ ...formError, role: "El rol es obligatorio" });
+			return;
+		}
 
-		console.log(formError);
+		setError({ ...formError, password: "", role: "" });
+
 		// register user
-		console.log(credentials);
 		try {
 			const { data } = await axios.post(`${userApi}/register`, {
 				...credentials,
 				password: password,
-				role: "client",
 			});
 
-			// setOpenedSignUp(false);
-			// setOpenedSignIn(true);
+			addUser(data.user);
+			setOpen(false);
 		} catch (error) {
 			if (error.response) {
 				// The request was made and the server responded with a status code
@@ -74,51 +113,11 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
 		}
 	}
 
-	useEffect(() => {
-		// update provinces
-		const newProvinces = regionsData.find(
-			(region) => credentials.region === region.region
-		)?.provincias;
-
-		if (newProvinces) setProvinces(newProvinces);
-		else setProvinces([]);
-
-		setCredentials({ ...credentials, province: "", commune: "" });
-	}, [credentials.region]);
-
-	useEffect(() => {
-		// update communes
-		const newCommunes = provinces.find(
-			(province) => credentials.province === province.name
-		)?.comunas;
-
-		if (newCommunes) setCommunes(newCommunes);
-		else setCommunes([]);
-
-		setCredentials({ ...credentials, commune: "" });
-	}, [credentials.province]);
-
 	return (
 		<Modal
-			styles={{
-				title: {
-					fontSize: "34px",
-					marginBottom: "1rem",
-					letterSpacing: "1.2px",
-					fontWeight: "700",
-				},
-			}}
-			centered
-			opened={openedSignUp}
-			onClose={() => {
-				setOpenedSignUp(false);
-				setError("");
-			}}
-			transition="fade"
-			transitionDuration={400}
-			position="center"
-			title="Registrarse"
-			size="lg"
+			opened={open}
+			onClose={() => setOpen(false)}
+			title="Editar Usuario"
 		>
 			<form className="form" onSubmit={registerUser}>
 				<Group direction="row" grow>
@@ -261,44 +260,27 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
 						]}
 					/>
 				</Group>
-
-				<button className="form-button" type="submit">
-					Crear Cuenta
-				</button>
-
-				<div className="modal-tools">
-					<div className="checkbox">
-						<input
-							type="checkbox"
-							value="lsRememberMe"
-							id="rememberMe"
-						/>
-						<label htmlFor="rememberMe">
-							Recibir ofertas y notificaciones
-						</label>
-					</div>
-				</div>
-
-				<div className="modal-footer">
-					<p className="modal-p">¿Ya tienes una cuenta? </p>
-					<p
-						className="modal-p"
-						onClick={() => {
-							setOpenedSignIn(true);
-							setOpenedSignUp(false);
-							setCredentials({
-								email: "",
-								password: "",
-								confirmPassword: "",
-							});
-						}}
-					>
-						Login
-					</p>
-				</div>
+				<Select
+					name="role"
+					label="Rol"
+					value={credentials.role}
+					data={roleOptions}
+					placeholder="Seleccione un rol"
+					onChange={(value) =>
+						setCredentials({ ...credentials, role: value })
+					}
+					required
+					error={formError.role && "Seleccione un rol"}
+				/>
+				<Group style={{ marginTop: "15px" }} position="right">
+					<Button type="submit">Guardar</Button>
+					<Button color="red" onClick={() => setOpen(false)}>
+						Cancelar
+					</Button>
+				</Group>
 			</form>
 		</Modal>
 	);
 }
 
-export default Register;
+export default NewUser;

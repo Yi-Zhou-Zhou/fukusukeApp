@@ -12,10 +12,10 @@ const MyContainer = styled.div`
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-
+    padding: 4rem 5.5rem;
     height: 100%;
     width: 100%;
-
+    
     color: white;
 `
 
@@ -25,7 +25,6 @@ const Greeting = () => {
             <Title 
                 order = {2}
                 style = {{ 
-                    position: 'absolute',
                     top: '10rem',
                     left: '12rem',
                     fontSize: '4rem',
@@ -43,10 +42,8 @@ const Greeting = () => {
                     fontWeight: '600',
                     fontSize: '1.375rem',
                     borderRadius: '5px',
+                    marginTop: "2rem"
 
-                    position: 'absolute',
-                    top: '18rem',
-                    left: '12rem',
                 }}
                 component = { Link } to = 'catalogo'
             >
