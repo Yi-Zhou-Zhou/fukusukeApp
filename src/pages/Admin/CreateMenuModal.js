@@ -4,7 +4,7 @@ import { Modal } from '@mantine/core'
 
 import styled from 'styled-components'
 
-import { Select,Input, Button } from '@mantine/core'
+import { Select,Input, Button, Textarea, NumberInput} from '@mantine/core'
 import { ProductContext } from '../../context/product/ProductContext'
 
 const MyGrid = styled.div`
@@ -19,19 +19,27 @@ const CreateMenuModal = ({ addModalOpened, setAddModalOpened, initialMenus, setI
         setNewMenuName(event.target.value)
     }
 
-    const [newMenuPrice, setNewMenuPrice] = useState("")
-    const handleNewMenuPriceChange = (event) => {
-        setNewMenuPrice(event.target.value)
-    }
+    const [newMenuPrice, setNewMenuPrice] = useState(0)
 
     const [newMenuType, setNewMenuType] = useState("tablas")
-    const handleNewMenuTypeChange = (event) => {
-        setNewMenuType(event.target.value)
+
+
+    const [newMenuStock, setNewMenuStock] = useState(0)
+    const [newMenuDescription, setNewMenuDescription] = useState("")
+    const handleNewMenuDescriptionChange = (event) => {
+        setNewMenuDescription(event.target.value)
     }
+
+    const [newMenuPicture, setNewMenuPicture] = useState("")
+    const handleNewMenuPictureChange = (event) => {
+        setNewMenuPicture(event.target.value)
+    }
+
 
     const [nameError, setNameError] = useState(false)
     const [priceError, setPriceError] = useState(false)
 
+    
     const {addProduct} = useContext(ProductContext)
     const handleNewMenuSubmit = (event) => {
         event.preventDefault()
@@ -49,17 +57,23 @@ const CreateMenuModal = ({ addModalOpened, setAddModalOpened, initialMenus, setI
             const newEl = {
                 name: newMenuName,
                 price: Number(newMenuPrice),
-                stock: 1,
+                stock: Number(newMenuStock),
+                description: newMenuDescription,
                 category: newMenuType,
-                picture: "https://images.unsplash.com/photo-1615361200141-f45040f367be?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80",
+                picture: newMenuPicture,
             }
             setNameError(false)
             setPriceError(false)
             setAddModalOpened(false)
-
+            
             //Add element function from Context
             addProduct(newEl)
-
+            setNewMenuName = ""
+            setNewMenuDescription = ""
+            setNewMenuPicture = ""
+            setNewMenuStock = 0
+            setNewMenuPrice = 0
+            setNewMenuType = "tablas"
             
         }
     }
@@ -77,7 +91,6 @@ const CreateMenuModal = ({ addModalOpened, setAddModalOpened, initialMenus, setI
 					fontWeight: "600",
 				},
 			}}
-			ce
         >
             <form onSubmit = { handleNewMenuSubmit }>
                 <MyGrid>
@@ -92,7 +105,7 @@ const CreateMenuModal = ({ addModalOpened, setAddModalOpened, initialMenus, setI
                                 onChange = { handleNewMenuNameChange }
                         />
                         {
-                            priceError
+                            nameError
                             ? <p style = {{ color: "red" }}> Debe ingresar el nombre del producto </p>
                             : null
                         }
@@ -103,11 +116,12 @@ const CreateMenuModal = ({ addModalOpened, setAddModalOpened, initialMenus, setI
                     </label>
 
                     <div>
-                            <Input
+                            <NumberInput
                                 placeholder="Precio del producto"
                                 type={"text"}
+                                defaultValue={0}
                                 value={newMenuPrice}
-                                onChange = { handleNewMenuPriceChange }
+                                onChange = { (val) => {setNewMenuPrice(val)} }
                         />
                         {
                             priceError
@@ -115,14 +129,48 @@ const CreateMenuModal = ({ addModalOpened, setAddModalOpened, initialMenus, setI
                             : null
                         }
                     </div>
+                    <label>
+                        Stock:
+                    </label>
 
+                    <div>
+                            <NumberInput
+                                placeholder="Stock del producto"
+                                value={newMenuStock}
+                                defaultValue={0}
+                                onChange = { (val) => {setNewMenuStock(val)} }
+                                required
+                        />
+                        {
+                            priceError
+                            ? <p style = {{ color: "red" }}> Debe ingresar el precio del producto! </p>
+                            : null
+                        }
+                    </div>
+                    
+                    <label>
+                        Descripción
+                    </label>
+                    <div>
+                            <Textarea
+                                placeholder="Descripción del producto"
+                                type={"text"}
+                                value={newMenuDescription}
+                                onChange = { handleNewMenuDescriptionChange}
+                        />
+                        {
+                            nameError
+                            ? <p style = {{ color: "red" }}> Debe ingresar la Descripción del producto </p>
+                            : null
+                        }
+                    </div>
                     <label>
                         Tipo de menu:
                     </label>
                     <Select
                         placeholder="Escoja tipo de menú"
-                        defaultValue={"tablas"}
-                        onChange = { handleNewMenuTypeChange }
+                        onChange = {setNewMenuType}
+                        value={newMenuType}
                         data={[
                             { value: 'tablas', label: 'Tablas' },
                             { value: 'entradas', label: 'Entradas' },
@@ -130,6 +178,23 @@ const CreateMenuModal = ({ addModalOpened, setAddModalOpened, initialMenus, setI
                             { value: 'ramen', label: 'Ramen' },
                         ]}
                     />
+                    <label>
+                        Imágen
+                    </label>
+
+                    <div>
+                            <Input
+                                placeholder="URL de la imágen"
+                                type={"text"}
+                                value={newMenuPicture}
+                                onChange = { handleNewMenuPictureChange }
+                        />
+                        {
+                            priceError
+                            ? <p style = {{ color: "red" }}> Debe ingresar el precio del producto! </p>
+                            : null
+                        }
+                    </div>
 
                 </MyGrid>
                 

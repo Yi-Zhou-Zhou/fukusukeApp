@@ -2,9 +2,8 @@ import React, { useContext, useState } from "react";
 	 
 import { ProductContext } from "../../context/product/ProductContext";
 
-import StockSlider from "./StockSlider";
 
-import { Button, Card, Group, Image, Text } from "@mantine/core";
+import { Button, Card, Group, Image, Text, Divider} from "@mantine/core";
 import { AiFillCloseCircle } from "react-icons/ai";
 import styled from "styled-components";
 
@@ -69,26 +68,31 @@ const StyledCardGroup = styled(CardGroup)`
 const ItemCard = ({ _id }) => {
 	const { products, updateProduct, deleteProduct} =
 		useContext(ProductContext);
-
+	
 	const product = products.find((product) => product._id === _id);
 	const [editing, setEditing] = useState(false);
 	const [cardTitle, setCardTitle] = useState(product.name);
 	const [cardPrice, setCardPrice] = useState(product.price);
+	const [cardStock, setCardStock] = useState(product.stock);
+	const [cardDescription, setCardDescription] = useState(product.description);
 
+	const initialValues = {
+		name: product.name,
+		price: product.price, 
+		stock: product.stock, 
+		description: product.description,
+	}
 	const handleDelete = () => {
 		// delete function from Context 
 		deleteProduct(_id)
+		setEditing(false)
 	
 	};
+	console.log("xd", initialValues)
 
 	const handleEdit = () => {
 		editing ? setEditing(false) : setEditing(true);
-		if (editing) {
-			const updatedProduct = {...product, name:cardTitle, price: cardPrice}
-			updateProduct(updatedProduct)
-		};
 	};
-
 	const handleTitleChange = (event) => {
 		setCardTitle(event.target.value);
 	};
@@ -97,20 +101,33 @@ const ItemCard = ({ _id }) => {
 		setCardPrice(event.target.value);
 	};
 
-	const handleTitleSubmit = (event) => {
-		event.preventDefault();
-		// update product in db
-		// update product locally (in context)
-		updateProduct({ ...product, name: cardTitle });
-	};
+	const handleStockChange = event => {
+		setCardStock(event.target.value);
+	}
 
-	const handlePriceSubmit = (event) => {
+	const handleDescriptionChange = event => {
+		setCardDescription(event.target.value);
+	}
+
+	const handleSubmit = event => {
 		event.preventDefault();
-		// update product in db
-		// update product locally (in context)
-		updateProduct({ ...product, price: cardPrice });
-	};
-	
+		const updatedProduct = {...product, name:cardTitle, price: cardPrice, stock: cardStock, description: cardDescription}
+		updateProduct(updatedProduct)
+		setEditing(false);
+		initialValues.name = cardTitle;
+		initialValues.price = cardPrice;
+		initialValues.stock = cardStock;
+		initialValues.description = cardDescription;
+	}
+
+	const handleCancel = event => {
+		event.preventDefault();
+		setCardTitle(initialValues.name);
+		setCardPrice(initialValues.price);
+		setCardDescription(initialValues.description);
+		setCardStock(initialValues.stock);
+		setEditing(false);
+	}
 	return (
 		<CardContainer>
 			{editing ? (
@@ -119,7 +136,7 @@ const ItemCard = ({ _id }) => {
 				</DeleteButton>
 			) : null}
 
-			<Card shadow="sm">
+			<Card shadow="sm" height="m">
 				<Card.Section>
 					<Image
 						src={product.picture}
@@ -129,28 +146,30 @@ const ItemCard = ({ _id }) => {
 				</Card.Section>
 
 				<StyledCardGroup>
-					{editing ? (
-						<form onSubmit={handleTitleSubmit}>
+				{editing ? (
+						<form onSubmit={handleSubmit}>
+							
 							<input
 								name="titleInput"
 								type="text"
 								value={cardTitle}
 								onChange={handleTitleChange}
-								style={{ width: "8rem" }}
+								style={{ width: "11rem", backgroundColor: "#f8fcbb", border: "none", borderRadius: "20px", textAlign: "center"}}
 							/>
 						</form>
 					) : (
 						<Text weight={600}>{cardTitle}</Text>
 					)}
 
-					{editing ? (
-						<form onSubmit={handlePriceSubmit}>
+				{editing ? (
+						<form onSubmit={handleSubmit}>
+
 							<input
 								name="priceInput"
 								type="text"
 								value={cardPrice}
 								onChange={handlePriceChange}
-								style={{ width: "3rem" }}
+								style={{ width: "3rem",backgroundColor: "#f8fcbb", border: "none", borderRadius: "20px", textAlign: "center"}}
 							/>
 						</form>
 					) : (
@@ -160,11 +179,42 @@ const ItemCard = ({ _id }) => {
 
 				<StyledCardGroup>
 						
+				{!editing ?  
 					<Button variant="light" color="blue" onClick={handleEdit}>
 						Editar
+					</Button> : 
+					<div style={{display: "flex", gap: "0.4rem"}}>
+					<Button variant="light" color="blue" onClick={handleSubmit}>
+						Aceptar
+					</Button> 
+					<Button variant="light" color="red" onClick={handleCancel}>
+						Cancelar
 					</Button>
-					<StockSlider stockState={product.stock} />
+				</div>}
+					{editing ? (
+						<form onSubmit={handleSubmit} style={{display: "flex", gap: "0.3rem"}}>
+							<input
+								name="stockInput"
+								type="text"
+								value={cardStock}
+								onChange={handleStockChange}
+								style={{ width: "3rem", backgroundColor: "#f8fcbb", border: "none", borderRadius: "20px", textAlign: "center"}}
+							/>
+						</form>
+					) : <Text>Stock: {product.stock}</Text>}
 				</StyledCardGroup>
+				<Divider my="xs" label="Descripción" labelPosition="center" />
+				{editing ? 
+						<form onSubmit={handleSubmit} style={{display: "flex", gap: "0.3rem"}}>
+							<textarea
+								name="descriptionInput"
+								type="text"
+								value={cardDescription}
+								onChange={handleDescriptionChange}
+								style={{ width: "100%", backgroundColor: "#f8fcbb	", border: "none", textAlign: "center"}}
+							/>
+						</form> : <Text size="xs" >{product.description}</Text>}
+				
 			</Card>
 		</CardContainer>
 	);
