@@ -54,15 +54,15 @@ const Order = ({ handleSelectOrder, order, selected }) => {
     const { products } = useContext(ProductContext)
     return(
         <Card style = {{ padding: '1rem 3rem', width: '100%', backgroundColor: '#d9d9d9' }}>
-            <ExpandButton onClick = { () => handleSelectOrder( order.id ) }>
+            <ExpandButton onClick = { () => handleSelectOrder( order._id ) }>
                 <StyledExpandButton />
             </ExpandButton>
 
             <Text style = {{position: 'absolute', top: '1.3rem', left: '1rem'}}> #X </Text>
 
-            <Text style = {{ fontSize: '1.5rem' }}> Realizado a las: { onlyTime(order.orderDate) } </Text>
-            <Text style = {{ fontSize: '1.5rem' }}> Entrega estimada: { addWaitingTime(order.orderDate, 1) } </Text>
-            <Text style = {{ fontSize: '1.5rem' }}> Precio: ${ stringifyPrice(calculateOrderPrice(products, order.content)) } </Text>
+            <Text style = {{ fontSize: '1.5rem' }}> Realizado a las: { onlyTime(order.createdAt) } </Text>
+            <Text style = {{ fontSize: '1.5rem' }}> Entrega estimada: { addWaitingTime(order.estimatedDelivery, 1) } </Text>
+            <Text style = {{ fontSize: '1.5rem' }}> Precio: ${ stringifyPrice(order.price) } </Text>
         </Card>
     )
 }

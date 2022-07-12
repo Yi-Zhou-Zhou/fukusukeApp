@@ -25,6 +25,7 @@ import Users from "./pages/Admin/Users";
 // Context
 import { ProductProvider } from "./context/product/ProductContext";
 import { UserProvider } from './context/user/UserContext';
+import { OrderProvider } from './context/order/OrderContext';
 
 // Role Users Validation
 import AdminProtectedRoute from './pages/ProtectedRoutes/AdminProtectedRoute';
@@ -39,16 +40,19 @@ const App = ({ orders, users }) => {
     return (
         <ProductProvider>
             <UserProvider>
-                <Router>
-                    <Routes>
-                        <Route path="/admin" element = { <AdminHome /> } >
-                            <Route index element = {<AdminGreeting orders = { orders } />} />
-                            <Route path = "pedidos" element = { <AdminOrders orders = { orders } users = { users } /> } />
-                            <Route path = "productos" element = { <Stock /> } >
-                                <Route path=":selectedCategory" element = { <Stock /> } />
-                            </Route>
-                            <Route path = "usuarios" element = { <Users /> } >
-                                <Route path=":selectedCategory" element = { <Users /> } />
+                <OrderProvider>
+                    <Router>
+                        <Routes>
+                        <Route element={<AdminProtectedRoute/>} >
+                            <Route path="/admin" element = { <AdminHome /> } >
+                                <Route index element = {<AdminGreeting orders = { orders } />} />
+                                <Route path = "pedidos" element = { <AdminOrders orders = { orders } users = { users } /> } />
+                                <Route path = "productos" element = { <Stock /> } >
+                                    <Route path=":selectedCategory" element = { <Stock /> } />
+                                </Route>
+                                <Route path = "usuarios" element = { <Users /> } >
+                                    <Route path=":selectedCategory" element = { <Users /> } />
+                                </Route>
                             </Route>
                         </Route>
 
@@ -58,8 +62,9 @@ const App = ({ orders, users }) => {
                             <Route path = "pedidos" element = { <Orders orders = { userOrders } /> } />
                         </Route>
 
-                    </Routes>
-                </Router>
+                        </Routes>
+                    </Router>
+                </OrderProvider>
             </UserProvider>
         </ProductProvider>
   );
