@@ -26,7 +26,7 @@ const mapRouteToFilterName = (route) => {
 		case "repartidores":
 			return "delivery";
 		default:
-			return null;
+			return "";
 	}
 };
 
