@@ -54,7 +54,7 @@ const Orders = ({ orders }) => {
                                             }}
                                         >
                                             <Text>
-                                                { product.name } { stringifyPrice(product.price) }
+                                                { product.cartQuantity } x { product.name } - { stringifyPrice(product.cartQuantity * product.price) }
                                             </Text>
 
                                             <List
