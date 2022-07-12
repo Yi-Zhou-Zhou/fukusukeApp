@@ -57,6 +57,8 @@ function EditUser({ _id, open, setOpen }) {
 		{ value: "cashier", label: "Cajero" },
 	];
 
+	const [emailErrorMessage, setEmailErrorMessage] = useState("");
+
 	const handleUpdate = async (e) => {
 		e.preventDefault();
 		try {
@@ -70,7 +72,9 @@ function EditUser({ _id, open, setOpen }) {
 			updateUser(data);
 			setOpen(false);
 		} catch (error) {
-			console.log(error);
+			if (error.response.data.message) {
+				setEmailErrorMessage(error.response.data.message);
+			}
 		}
 	};
 
@@ -109,6 +113,8 @@ function EditUser({ _id, open, setOpen }) {
 						setData({ ...data, email: e.target.value })
 					}
 					required
+					error={emailErrorMessage}
+					onInput={() => setEmailErrorMessage("")}
 				/>
 
 				<TextInput
