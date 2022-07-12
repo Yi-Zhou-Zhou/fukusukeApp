@@ -27,7 +27,7 @@ const StyledTitle = styled(Title)`
     }
 `
 
-const AdminOrders = ({ orders, users }) => {
+const AdminOrders = () => {
 
     const { products } = useContext(ProductContext);
     const { orders } = useContext(OrderContext);
