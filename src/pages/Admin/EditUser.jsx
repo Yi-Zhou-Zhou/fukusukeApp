@@ -74,8 +74,6 @@ function EditUser({ _id, open, setOpen }) {
 		}
 	};
 
-	console.log(data);
-
 	return (
 		<Modal
 			opened={open}
