@@ -15,7 +15,7 @@ const MyContainer = styled.div`
     padding: 4rem 5.5rem;
     height: 100%;
     width: 100%;
-
+    
     color: white;
 `
 

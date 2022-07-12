@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-
+	 
 import { ProductContext } from "../../context/product/ProductContext";
 
 import StockSlider from "./StockSlider";
@@ -9,6 +9,7 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import styled from "styled-components";
 
 import stringifyPrice from "../../functions/common/stringifyPrice";
+
 
 // "styled-component" para un botón que borra tarjetas
 const DeleteButton = styled.button`
@@ -66,7 +67,7 @@ const StyledCardGroup = styled(CardGroup)`
 `;
 
 const ItemCard = ({ _id }) => {
-	const { products, updateProduct, deleteProduct, addProduct } =
+	const { products, updateProduct, deleteProduct} =
 		useContext(ProductContext);
 
 	const product = products.find((product) => product._id === _id);
@@ -75,13 +76,17 @@ const ItemCard = ({ _id }) => {
 	const [cardPrice, setCardPrice] = useState(product.price);
 
 	const handleDelete = () => {
-		// delete product in db
-		// delete product locally (in context)
-		deleteProduct(_id);
+		// delete function from Context 
+		deleteProduct(_id)
+	
 	};
 
 	const handleEdit = () => {
 		editing ? setEditing(false) : setEditing(true);
+		if (editing) {
+			const updatedProduct = {...product, name:cardTitle, price: cardPrice}
+			updateProduct(updatedProduct)
+		};
 	};
 
 	const handleTitleChange = (event) => {
@@ -105,7 +110,7 @@ const ItemCard = ({ _id }) => {
 		// update product locally (in context)
 		updateProduct({ ...product, price: cardPrice });
 	};
-
+	
 	return (
 		<CardContainer>
 			{editing ? (
@@ -154,10 +159,10 @@ const ItemCard = ({ _id }) => {
 				</StyledCardGroup>
 
 				<StyledCardGroup>
+						
 					<Button variant="light" color="blue" onClick={handleEdit}>
 						Editar
 					</Button>
-
 					<StockSlider stockState={product.stock} />
 				</StyledCardGroup>
 			</Card>

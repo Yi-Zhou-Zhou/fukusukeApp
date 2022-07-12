@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import Order from './Order';
 
 import { ProductContext } from '../../context/product/ProductContext';
+import { OrderContext } from '../../context/order/OrderContext';
+import { UserContext } from '../../context/user/UserContext';
 
 const StyledTitle = styled(Title)`
     display: flex;
@@ -25,19 +27,30 @@ const StyledTitle = styled(Title)`
     }
 `
 
-const Orders = ({ orders, users }) => {
+const AdminOrders = () => {
 
     const { products } = useContext(ProductContext);
+    const { orders } = useContext(OrderContext);
+    const { users } = useContext(UserContext);
+    console.log(orders)
 
     const [selectedOrder, setSelectedOrder] = useState(null)
     const [orderingUser, setOrderingUser] = useState(null)
 
     const handleSelectOrder = ( id ) => {
-        const findSelectedOrder = orders.find(order => order.id === id)
-        const findOrderingUser = users.find(user => user.id === findSelectedOrder.orderedBy)
+        
+        const findSelectedOrder = orders.find(order => order._id === id)
+        const findOrderingUser = users.find(user => user._id === findSelectedOrder.client.id)
 
         setSelectedOrder(findSelectedOrder)
         setOrderingUser(findOrderingUser)
+
+
+        console.log(orders)
+        console.log(id)
+        console.log(findSelectedOrder)
+        console.log(findOrderingUser)
+        console.log(users)
     }
 
     return(
@@ -48,6 +61,7 @@ const Orders = ({ orders, users }) => {
                         orders.map(order =>
                             <Order key = { order.id } order = { order } handleSelectOrder = {handleSelectOrder}/>
                         )
+
                     }
                 </Group>
             </Grid.Col>
@@ -63,10 +77,10 @@ const Orders = ({ orders, users }) => {
 
                             <List style = {{ fontSize: '1.125rem' }}>
                                 {
-                                    selectedOrder.content.map(item =>  
-                                            <List.Item key = { item }>
+                                    selectedOrder.productos.map(item =>  
+                                            <List.Item key = { item.name }>
                                                 {
-                                                    products.filter(product => product._id === item).map(product => product.name)
+                                                    item.name
                                                 }
                                             </List.Item>
                                     )
@@ -76,7 +90,7 @@ const Orders = ({ orders, users }) => {
                             <Title order = { 2 } style = {{ fontSize: '2rem' }}> Dirección de Entrega </Title>
 
                             <List style = {{ fontSize: '1.125rem' }}>
-                                <List.Item> { selectedOrder.deliveryAddress } </List.Item>
+                                <List.Item> { selectedOrder.client.address } </List.Item>
                             </List>
 
                             <Title order = { 2 } style = {{ fontSize: '2rem' }} > Detalles del Cliente </Title>
@@ -93,4 +107,4 @@ const Orders = ({ orders, users }) => {
     )
 }
 
-export default Orders
+export default AdminOrders

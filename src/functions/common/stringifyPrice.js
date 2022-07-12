@@ -2,9 +2,10 @@
 // @param { int } price: El número a separar
 // @return { string } price separado por puntos
 const stringifyPrice = (price) => {
-    return(
-        price.toString().match(/(\d+?)(?=(\d{3})+(?!\d)|$)/g).join(".")        
-    )
+
+    const stringifiedPrice = new Intl.NumberFormat(undefined, { style: 'currency', currency: 'CLP' }).format(price)
+
+    return(stringifiedPrice)
 }
 
 export default stringifyPrice

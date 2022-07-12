@@ -2,60 +2,155 @@ import React, { useState } from "react";
 
 import { AppShell } from "@mantine/core";
 
-import { Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 
 import imgLogo from "../../images/logo.png";
-import { AiOutlineLogin } from "react-icons/ai";
+import pdf from "../../pdf/Carta.pdf";
+
+import { AiOutlineLogin, AiOutlineShoppingCart, AiOutlineClockCircle } from "react-icons/ai";
+
 import { BiFoodMenu } from "react-icons/bi";
 import { RiTeamLine } from "react-icons/ri";
 import { GoLocation } from "react-icons/go";
-import pdf from "../../pdf/Carta.pdf";
+
 import Login from "./Login";
 import Register from "./Register";
 
-const HomeHeader = ({ setOpenedSignIn }) => {
-    return(
-        <nav className="navbar-menu">
-            <div className="navbar-container">
-                <div className="logo-container">
-                    <img className="logo" src={imgLogo} alt="fukusuke" />
+const HomeHeader = ({ setOpenedSignIn, handleOpenCart }) => {
+    let loc = useLocation()
+
+    if(loc.pathname === "/")
+    {
+        return(
+            <nav className="navbar-menu">
+                <div className="navbar-container">
+                    <div className="logo-container">
+                        <Link to="/">
+                            <img className="logo" src={imgLogo} alt="fukusuke" />
+                        </Link>
+                    </div>
+    
+                    <div className="navbar-links">
+                        <a href={pdf} target="_blank" className="navbar-link">
+                            <BiFoodMenu />
+                            Carta
+                        </a>
+
+                        <a href="#" className="navbar-link">
+                            <RiTeamLine />
+                            Nosotros
+                        </a>
+
+                        <a href="#" className="navbar-link">
+                            <GoLocation />
+                            Contacto
+                        </a>
+
+                        <Link to = "/pedidos" className="navbar-link">
+                            <AiOutlineClockCircle />
+                            Pedidos
+                        </Link>
+
+                        <i
+                            onClick={() => {
+                                setOpenedSignIn(true);
+                            }}
+                            className="navbar-icon"
+                        >
+                            <AiOutlineLogin size={35} color="white" />
+                        </i>
+                    </div>
                 </div>
-                <div className="navbar-links">
-                    <a href={pdf} target="_blank" className="navbar-link">
-                        <BiFoodMenu />
-                        Carta
-                    </a>
-                    <a href="#" className="navbar-link">
-                        <RiTeamLine />
-                        Nosotros
-                    </a>
-                    <a href="#" className="navbar-link">
-                        <GoLocation />
-                        Contacto
-                    </a>
-                    <i
-                        onClick={() => {
-                            setOpenedSignIn(true);
-                        }}
-                        className="navbar-icon"
-                    >
-                        <AiOutlineLogin size={35} color="white" />
-                    </i>
+            </nav>
+        )
+    } else if(loc.pathname === "/catalogo")
+    {
+        return(
+            <nav className="navbar-menu">
+                <div className="navbar-container">
+                    <div className="logo-container">
+                        <Link to="/">
+                            <img className="logo" src={imgLogo} alt="fukusuke" />
+                        </Link>
+                    </div>
+    
+                    <div className="navbar-links">
+                        <button
+                            href = "#" 
+                            className = "navbar-link"
+                            style = {{ border: '0', background: 'transparent', cursor: 'pointer' }} 
+                            onClick = { handleOpenCart }
+                        >
+                            <AiOutlineShoppingCart />
+                            Carrito
+                        </button>
+
+                        <Link to = "/pedidos" className="navbar-link">
+                            <AiOutlineClockCircle />
+                            Pedidos
+                        </Link>
+
+                        <i
+                            onClick={() => {
+                                setOpenedSignIn(true);
+                            }}
+                            className="navbar-icon"
+                        >
+                            <AiOutlineLogin size={35} color="white" />
+                        </i>
+                    </div>
                 </div>
-            </div>
-        </nav>
-    )
+            </nav>
+        )
+    } else {
+        return(
+            <nav className="navbar-menu">
+                <div className="navbar-container">
+                    <div className="logo-container">
+                        <Link to="/">
+                            <img className="logo" src={imgLogo} alt="fukusuke" />
+                        </Link>
+                    </div>
+    
+                    <div className="navbar-links">
+                        <Link to = "/catalogo" className="navbar-link">
+                            <BiFoodMenu />
+                            Catalogo
+                        </Link>
+
+                        <Link to = "/pedidos" className="navbar-link">
+                            <AiOutlineClockCircle />
+                            Pedidos
+                        </Link>
+
+                        <i
+                            onClick={() => {
+                                setOpenedSignIn(true);
+                            }}
+                            className="navbar-icon"
+                        >
+                            <AiOutlineLogin size={35} color="white" />
+                        </i>
+                    </div>
+                </div>
+            </nav>
+        )
+    }
 }
 
-const Home = () => {
-    const [openedSignUp, setOpenedSignUp] = useState(false);
-    const [openedSignIn, setOpenedSignIn] = useState(false);
+const Home = ({ openedCart, setOpenedCart }) => {
+    const handleOpenCart = () => {
+        openedCart ? setOpenedCart(false) : setOpenedCart(true);
+    };
+
+    const [openedSignUp, setOpenedSignUp] = useState(false)
+    const [openedSignIn, setOpenedSignIn] = useState(false)
 
     return (
         <AppShell
             fixed
             padding = "0"
-            header = { <HomeHeader setOpenedSignIn = { setOpenedSignIn }/> }
+            header = { <HomeHeader setOpenedSignIn = { setOpenedSignIn } handleOpenCart = { handleOpenCart } /> }
             navbar = { null }
             styles = {{ main: { minHeight: 'calc(100vh - 80px)' } }}
         >
