@@ -82,19 +82,11 @@ select {
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
 
-.logo-container{
-  height: 100%;
-}
-.logo{
-  height: 100%;
-}
-
 .navbar-menu{
   height: 80px;
   background-color: black;
   padding: 0px 90px 0px 90px;
   font-family: 'Special Elite', cursive;
-  
 }
 
 .navbar-container{
@@ -102,15 +94,25 @@ select {
   height: 100%;
   align-items: center;
   justify-content: space-between;
+}
 
+.logo-container{
+  height: 100%;
+}
+
+.logo{
+  height: 100%;
 }
 
 .navbar-links{
   display: flex;
   justify-content: space-evenly;
-  width: 60%;
   height: 0%;
   align-items: center;
+}
+
+.navbar-links > * {
+  margin: 0 4rem;
 }
 
 @media screen and (max-width: 1024px){
