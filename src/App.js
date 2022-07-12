@@ -27,31 +27,14 @@ import { ProductProvider } from "./context/product/ProductContext";
 import { UserProvider } from './context/user/UserContext';
 
 // Role Users Validation
-
 import AdminProtectedRoute from './pages/ProtectedRoutes/AdminProtectedRoute';
 import UserProtectedRoute from './pages/ProtectedRoutes/UserProtectedRoute';
-
 
 const App = ({ orders, users }) => {
     const [openedCart, setOpenedCart] = useState(false)
     const [cart, setCart] = useState([])
     // No cambiar, estoy probando con esto
-    const [userOrders, setUserOrders] = useState([
-        [
-            {
-                "_id": "62c4f0f69f423e3c21ba35cb",
-                "name": "Tabla de 2 personas ",
-                "price": 20000,
-                "stock": 14,
-                "category": "tablas",
-                "picture": "https://images.unsplash.com/photo-1615361200098-9e630ec29b4e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80",
-                "description": "15 Camarón, 15 Salmón",
-                "createdAt": "2022-07-12T01:10:47.178Z",
-                "updatedAt": "2022-07-12T01:10:47.178Z",
-                "cartQuantity": 4
-            }
-        ],
-      ])
+    const [userOrders, setUserOrders] = useState([])
 
     return (
         <ProductProvider>
@@ -60,7 +43,7 @@ const App = ({ orders, users }) => {
                     <Routes>
                         <Route path="/admin" element = { <AdminHome /> } >
                             <Route index element = {<AdminGreeting orders = { orders } />} />
-                            <Route path = "pedidos" element = { <Orders orders = { orders } users = { users } /> } />
+                            <Route path = "pedidos" element = { <AdminOrders orders = { orders } users = { users } /> } />
                             <Route path = "productos" element = { <Stock /> } >
                                 <Route path=":selectedCategory" element = { <Stock /> } />
                             </Route>
