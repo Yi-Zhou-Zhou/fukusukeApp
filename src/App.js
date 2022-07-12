@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import './App.css';
 
 import { 
@@ -23,27 +25,38 @@ import Catalog from './pages/User/Catalog';
 import { ProductProvider } from "./context/product/ProductContext";
 import { UserProvider } from './context/user/UserContext';
 
+// Role Users Validation
+
+import AdminProtectedRoute from './pages/ProtectedRoutes/AdminProtectedRoute';
+import UserProtectedRoute from './pages/ProtectedRoutes/UserProtectedRoute';
+
+
 const App = ({ orders, users }) => {
+    const [openedCart, setOpenedCart] = useState(false)
+    const [cart, setCart] = useState([])
+
     return (
         <ProductProvider>
             <UserProvider>
                 <Router>
                     <Routes>
-                        <Route path="/admin" element = { <AdminHome /> } >
-                            <Route index element = {<AdminGreeting orders = { orders } />} />
-                            <Route path = "pedidos" element = { <Orders orders = { orders } users = { users } /> } />
-                            <Route path = "productos" element = { <Stock /> } >
-                                <Route path=":selectedCategory" element = { <Stock /> } />
-                            </Route>
-                            <Route path = "usuarios" element = { <Users /> } >
-                                <Route path=":selectedCategory" element = { <Users /> } />
-                            </Route>
-                        </Route>
+                      <Route element={<AdminProtectedRoute/>} >
+                          <Route path="/admin" element = { <AdminHome /> } >
+                              <Route index element = {<AdminGreeting orders = { orders } />} />
+                              <Route path = "pedidos" element = { <Orders orders = { orders } users = { users } /> } />
+                              <Route path = "productos" element = { <Stock /> } >
+                                  <Route path=":selectedCategory" element = { <Stock /> } />
+                              </Route>
+                              <Route path = "usuarios" element = { <Users /> } >
+                                  <Route path=":selectedCategory" element = { <Users /> } />
+                              </Route>
+                          </Route>
+                      </Route>
 
-                        <Route path="/" element={<Home/>} >
-                            <Route index element = { <Greeting/> } />
-                            <Route path = "catalogo" element = { <Catalog /> } />
-                        </Route>
+                      <Route path="/" element={<Home openedCart = { openedCart } setOpenedCart = { setOpenedCart }/>} >
+                          <Route index element = { <Greeting/> } />
+                          <Route path = "catalogo" element = { <Catalog cart = { cart } setCart = { setCart } openedCart = { openedCart } setOpenedCart = { setOpenedCart } /> } />
+                      </Route>
 
                     </Routes>
                 </Router>

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Modal, PasswordInput, TextInput } from "@mantine/core";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import { userApi } from "../../api/Api";
+import jwt_decode from 'jwt-decode';
 
 function Login({ openedSignIn, setOpenedSignIn, setOpenedSignUp }) {
 	const [formError, setError] = useState({
@@ -11,6 +12,11 @@ function Login({ openedSignIn, setOpenedSignIn, setOpenedSignUp }) {
 	});
 
 	const navigate = useNavigate();
+	const redirectUser = (data) => {
+		const userRole = jwt_decode(data.token).role;
+		if (userRole === 'admin') navigate('./admin')
+		else if (userRole ==='user') navigate ('./user')
+	}
 	const [credentials, setCredentials] = useState({});
 	const handleChange = (e) => {
 		setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -27,6 +33,8 @@ function Login({ openedSignIn, setOpenedSignIn, setOpenedSignUp }) {
 		try {
 			const { data } = await axios.post(`${userApi}/login`, loginUser);
 			localStorage.setItem("token", data.token);
+			redirectUser(data)
+            
 		} catch (error) {
 			setError({ ...formError, email: error.response.data.err.message });
 		}

@@ -3,7 +3,6 @@ import { Group, Modal, PasswordInput, Select, TextInput } from "@mantine/core";
 import "dayjs/locale/es-mx";
 import { DatePicker } from "@mantine/dates";
 import axios from "axios";
-import { Text } from "@mantine/core";
 import usePasswordSecurityValidation from "../../hooks/usePasswordSecurityValidation";
 import { userApi } from "../../api/Api";
 // import regions json

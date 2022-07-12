@@ -6,6 +6,7 @@ import { Outlet } from "react-router-dom";
 
 import imgLogo from "../../images/logo.png";
 import { AiOutlineLogin } from "react-icons/ai";
+import { AiOutlineShoppingCart } from "react-icons/ai"
 import { BiFoodMenu } from "react-icons/bi";
 import { RiTeamLine } from "react-icons/ri";
 import { GoLocation } from "react-icons/go";
@@ -13,13 +14,14 @@ import pdf from "../../pdf/Carta.pdf";
 import Login from "./Login";
 import Register from "./Register";
 
-const HomeHeader = ({ setOpenedSignIn }) => {
+const HomeHeader = ({ setOpenedSignIn, handleOpenCart }) => {
     return(
         <nav className="navbar-menu">
             <div className="navbar-container">
                 <div className="logo-container">
                     <img className="logo" src={imgLogo} alt="fukusuke" />
                 </div>
+
                 <div className="navbar-links">
                     <a href={pdf} target="_blank" className="navbar-link">
                         <BiFoodMenu />
@@ -33,6 +35,15 @@ const HomeHeader = ({ setOpenedSignIn }) => {
                         <GoLocation />
                         Contacto
                     </a>
+                    <button
+                        href = "#" 
+                        className = "navbar-link"
+                        style = {{ border: '0', background: 'transparent', cursor: 'pointer' }} 
+                        onClick = { handleOpenCart }
+                    >
+                        <AiOutlineShoppingCart />
+                        Carrito
+                    </button>
                     <i
                         onClick={() => {
                             setOpenedSignIn(true);
@@ -47,15 +58,19 @@ const HomeHeader = ({ setOpenedSignIn }) => {
     )
 }
 
-const Home = () => {
-    const [openedSignUp, setOpenedSignUp] = useState(false);
-    const [openedSignIn, setOpenedSignIn] = useState(false);
+const Home = ({ openedCart, setOpenedCart }) => {
+    const handleOpenCart = () => {
+        openedCart ? setOpenedCart(false) : setOpenedCart(true);
+    };
+
+    const [openedSignUp, setOpenedSignUp] = useState(false)
+    const [openedSignIn, setOpenedSignIn] = useState(false)
 
     return (
         <AppShell
             fixed
             padding = "0"
-            header = { <HomeHeader setOpenedSignIn = { setOpenedSignIn }/> }
+            header = { <HomeHeader setOpenedSignIn = { setOpenedSignIn } handleOpenCart = { handleOpenCart } /> }
             navbar = { null }
             styles = {{ main: { minHeight: 'calc(100vh - 80px)' } }}
         >
