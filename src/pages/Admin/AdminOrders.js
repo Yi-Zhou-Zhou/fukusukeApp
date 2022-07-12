@@ -25,7 +25,7 @@ const StyledTitle = styled(Title)`
     }
 `
 
-const Orders = ({ orders, users }) => {
+const AdminOrders = ({ orders, users }) => {
 
     const { products } = useContext(ProductContext);
 
@@ -93,4 +93,4 @@ const Orders = ({ orders, users }) => {
     )
 }
 
-export default Orders
+export default AdminOrders
