@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useParams, useNavigate } from "react-router-dom";
+import {AiOutlineLogout} from "react-icons/ai";
 import styled from 'styled-components'
 import { AppShell, Image, Navbar, Header } from '@mantine/core';
 import jwt_decode from 'jwt-decode';
@@ -43,6 +44,12 @@ const StyledLink = styled(NewLink)`
 `
 
 const AppShellHeader = () => {
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        localStorage.clear();
+    navigate('/')
+    
+    }
     return(
         <Header 
             height = {64}
@@ -70,6 +77,10 @@ const AppShellHeader = () => {
                 <StyledLink  text = "Pedidos" route = 'pedidos' />
                 <StyledLink  text = "Productos" route = 'productos' />
                 <StyledLink  text = "Usuarios" route = 'usuarios' />
+                <i onClick={() => handleLogout()} className="navbar-icon">
+                    <AiOutlineLogout size={30} color="white" />   
+                </i>
+
             </FlexDiv>
         </Header>
     )

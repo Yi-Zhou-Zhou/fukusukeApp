@@ -1,13 +1,13 @@
 import React, { useState } from "react";
+import verifyUser from "../../functions/common/verifyUser";
+import { AppShell, Text } from "@mantine/core";
 
-import { AppShell } from "@mantine/core";
-
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate} from "react-router-dom";
 
 import imgLogo from "../../images/logo.png";
 import pdf from "../../pdf/Carta.pdf";
 
-import { AiOutlineLogin, AiOutlineShoppingCart, AiOutlineClockCircle } from "react-icons/ai";
+import { AiOutlineLogin, AiOutlineShoppingCart, AiOutlineClockCircle, AiOutlineLogout} from "react-icons/ai";
 
 import { BiFoodMenu } from "react-icons/bi";
 import { RiTeamLine } from "react-icons/ri";
@@ -18,7 +18,13 @@ import Register from "./Register";
 
 const HomeHeader = ({ setOpenedSignIn, handleOpenCart }) => {
     let loc = useLocation()
+    const navigate = useNavigate()
 
+    const handleLogout = () => {
+        localStorage.clear();
+    navigate('/')
+    
+    }
     if(loc.pathname === "/")
     {
         return(
@@ -90,14 +96,18 @@ const HomeHeader = ({ setOpenedSignIn, handleOpenCart }) => {
                             Pedidos
                         </Link>
 
-                        <i
-                            onClick={() => {
-                                setOpenedSignIn(true);
-                            }}
-                            className="navbar-icon"
-                        >
-                            <AiOutlineLogin size={35} color="white" />
+
+                    {verifyUser() ? 
+                        <i onClick={() => handleLogout()} className="navbar-icon">
+                            <AiOutlineLogout size={32} color="white" />    
                         </i>
+                        :  
+                        <i onClick={() => { setOpenedSignIn(true);}} className="navbar-icon">
+                            <AiOutlineLogin size={32} color="white" />
+                        </i>
+                    }
+                        
+                        
                     </div>
                 </div>
             </nav>
