@@ -2,6 +2,7 @@ import { createContext, useReducer, useEffect } from "react";
 import UserReducer from "./UserReducer";
 import axios from "axios";
 import { userApi } from "../../api/Api";
+import jwt_decode from "jwt-decode";
 
 const defaultState = [];
 
@@ -21,7 +22,10 @@ export const UserProvider = ({ children }) => {
 				console.log(error);
 			}
 		};
-		fetchUsers();
+
+		const user_token = localStorage.getItem("token");
+		const user_role = user_token && jwt_decode(user_token).role;
+		if (user_role === "admin") fetchUsers();
 	}, []);
 
 	const [users, dispatch] = useReducer(UserReducer, defaultState);
@@ -38,21 +42,21 @@ export const UserProvider = ({ children }) => {
 			type: "ADD_USER",
 			payload: user,
 		});
-	}
+	};
 
 	const updateUser = (user) => {
 		dispatch({
 			type: "UPDATE_USER",
 			payload: user,
 		});
-	}
+	};
 
 	const deleteUser = (user) => {
 		dispatch({
 			type: "DELETE_USER",
 			payload: user,
 		});
-	}
+	};
 
 	return (
 		<UserContext.Provider
