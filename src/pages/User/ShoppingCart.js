@@ -1,18 +1,17 @@
 import React, { useContext, useEffect, useState } from "react"
 
-import jwt_decode from 'jwt-decode'
-
 import { Button, Divider, Drawer, Text } from "@mantine/core"
 import ShoppingCartItem from "./ShoppingCartItem"
 
 import stringifyPrice from '../../functions/common/stringifyPrice'
-import naiveGenerateId from '../../functions/common/naiveGenerateId'
 import { OrderContext } from "../../context/order/OrderContext"
+import { ProductContext } from "../../context/product/ProductContext"
 import jwt_decode from 'jwt-decode';
 
-const ShoppingCart = ({ cart, setCart, openedCart, setOpenedCart, setShowBuyNotification, orders, setOrders }) => {
+const ShoppingCart = ({ cart, setCart, openedCart, setOpenedCart, setShowBuyNotification }) => {
     const [total, setTotal] = useState(0)
     const { addOrder} = useContext(OrderContext);
+    const { updateProduct } = useContext(ProductContext)
 
     const user_token = localStorage.getItem('token')
     const user_role = user_token && jwt_decode(user_token).role
@@ -24,8 +23,6 @@ const ShoppingCart = ({ cart, setCart, openedCart, setOpenedCart, setShowBuyNoti
     }
 
     useEffect(() => {
-        console.log(cart)
-
         setTotal(cart.reduce((anterior, actual) => anterior + Math.floor(actual.price) * actual.cartQuantity, 0))
 
         if(cart.find(product => product.cartQuantity === 0))
@@ -35,50 +32,44 @@ const ShoppingCart = ({ cart, setCart, openedCart, setOpenedCart, setShowBuyNoti
     }, [cart, setCart])
 
     const handleBuyCart = () => {
-        setShowBuyNotification(true)
-        const user_id = user_token && jwt_decode(user_token).id
-
-        const cartObject = {
-            id: naiveGenerateId(orders),
-            productos: [...cart],
-            client: user_id
-        }
-
-        //Sacamos el token, ayuda xfa
         const user_token = localStorage.getItem('token')
         const decode = user_token && jwt_decode(user_token)
+        
+        const user_id = decode?.id
         const user_name = decode?.name
         const user_address = decode?.address
-        const user_phone = decode?.phone
-                
-        //setOrders([...orders, cart])
-        //Agregamos la orden nueva 
+
         let productos = []
 
         for (let i = 0; i < cart.length; i++) {
 			const object = {
-				id: cart[i].id,
+                id: cart[i].id,
 				name: cart[i].name,
 				price: cart[i].price,
 				description: cart[i].description,
 				picture: cart[i].picture,
 				quantity: cart[i].cartQuantity,
 			}
-			productos.push(object)
+			
+            productos.push(object)
+
+            updateProduct({ ...cart[i], stock: cart[i].stock - cart[i].cartQuantity })
 		}
 
         const order = {
             "price": total,
             "productos": productos,
-            "name": user_name,
-            "address": user_address,
-            "phone": user_phone,
-            
-        } 
+            "state": "preparando",
+            "userId": user_id,
+            "userName": user_name,
+            "userAddress": user_address
+        }
+
         addOrder(order)
 
+        setShowBuyNotification(true)
         setCart([])
-        setOpenedCart(false)
+        setOpenedCart(false)        
     }
 
     return(
