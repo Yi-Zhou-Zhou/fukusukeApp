@@ -48,9 +48,7 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
 
 		setError({ ...formError, password: "" });
 
-		console.log(formError);
 		// register user
-		console.log(credentials);
 		try {
 			const { data } = await axios.post(`${userApi}/register`, {
 				...credentials,
@@ -58,8 +56,8 @@ function Register({ openedSignUp, setOpenedSignUp, setOpenedSignIn }) {
 				role: "client",
 			});
 
-			// setOpenedSignUp(false);
-			// setOpenedSignIn(true);
+			setOpenedSignUp(false);
+			setOpenedSignIn(true);
 		} catch (error) {
 			if (error.response) {
 				// The request was made and the server responded with a status code

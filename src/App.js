@@ -27,10 +27,6 @@ import { ProductProvider } from "./context/product/ProductContext";
 import { UserProvider } from './context/user/UserContext';
 import { OrderProvider } from './context/order/OrderContext';
 
-// Role Users Validation
-import AdminProtectedRoute from './pages/ProtectedRoutes/AdminProtectedRoute';
-import UserProtectedRoute from './pages/ProtectedRoutes/UserProtectedRoute';
-
 const App = ({ orders, users }) => {
     const [openedCart, setOpenedCart] = useState(false)
     const [cart, setCart] = useState([])
@@ -43,16 +39,14 @@ const App = ({ orders, users }) => {
                 <OrderProvider>
                     <Router>
                         <Routes>
-                        <Route element={<AdminProtectedRoute/>} >
-                            <Route path="/admin" element = { <AdminHome /> } >
-                                <Route index element = {<AdminGreeting orders = { orders } />} />
-                                <Route path = "pedidos" element = { <AdminOrders orders = { orders } users = { users } /> } />
-                                <Route path = "productos" element = { <Stock /> } >
-                                    <Route path=":selectedCategory" element = { <Stock /> } />
-                                </Route>
-                                <Route path = "usuarios" element = { <Users /> } >
-                                    <Route path=":selectedCategory" element = { <Users /> } />
-                                </Route>
+                        <Route path="/admin" element = { <AdminHome /> } >
+                            <Route index element = {<AdminGreeting orders = { orders } />} />
+                            <Route path = "pedidos" element = { <AdminOrders orders = { orders } users = { users } /> } />
+                            <Route path = "productos" element = { <Stock /> } >
+                                <Route path=":selectedCategory" element = { <Stock /> } />
+                            </Route>
+                            <Route path = "usuarios" element = { <Users /> } >
+                                <Route path=":selectedCategory" element = { <Users /> } />
                             </Route>
                         </Route>
 

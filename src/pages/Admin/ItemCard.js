@@ -88,7 +88,6 @@ const ItemCard = ({ _id }) => {
 		setEditing(false)
 	
 	};
-	console.log("xd", initialValues)
 
 	const handleEdit = () => {
 		editing ? setEditing(false) : setEditing(true);

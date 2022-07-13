@@ -3,7 +3,6 @@ import ProductReducer from "./ProductReducer";
 import axios from "axios";
 import { productApi } from "../../api/Api";
 
-
 const defaultState = [];
 
 export const ProductContext = createContext(defaultState);
@@ -14,7 +13,6 @@ export const ProductProvider = ({ children }) => {
 	useEffect(() => {
 		const fetchProducts = async () => {
 			try {
-				
 				const response = await axios.get(`${productApi}/`, {
 					headers: {
 						"x-auth-token": localStorage.getItem("token"),
@@ -22,14 +20,12 @@ export const ProductProvider = ({ children }) => {
 				});
 
 				setProducts(response.data);
-				console.log(response.data)
 			} catch (error) {
 				console.log(error);
 			}
 		};
 		fetchProducts();
 	}, []);
-
 
 	const setProducts = (products) => {
 		dispatch({
@@ -39,19 +35,20 @@ export const ProductProvider = ({ children }) => {
 	};
 
 	const updateProduct = async (product) => {
-		try{
-			const response = await axios.put(productApi, product, {headers: {
-				"x-auth-token": localStorage.getItem("token"),
-			}},);
+		try {
+			const response = await axios.put(productApi, product, {
+				headers: {
+					"x-auth-token": localStorage.getItem("token"),
+				},
+			});
 			dispatch({
 				type: "UPDATE_PRODUCT",
 				payload: response.data.updatedProduct,
-			})
+			});
+		} catch (error) {
+			console.log(error);
+		}
 
-		}catch(error){
-			console.log(error)
-		};
-		
 		dispatch({
 			type: "UPDATE_PRODUCT",
 			payload: product,
@@ -59,33 +56,36 @@ export const ProductProvider = ({ children }) => {
 	};
 
 	const deleteProduct = async (_id) => {
-		try{
-			await axios.delete(productApi, {headers: {
-				"x-auth-token": localStorage.getItem("token")
-			}, data: {_id}})
+		try {
+			await axios.delete(productApi, {
+				headers: {
+					"x-auth-token": localStorage.getItem("token"),
+				},
+				data: { _id },
+			});
 
 			dispatch({
 				type: "DELETE_PRODUCT",
 				payload: _id,
-			})
-		}catch(error){
-			console.log(error)
+			});
+		} catch (error) {
+			console.log(error);
 		}
 	};
 
-	const addProduct = async(product) => {
-		try{
-
-			const response = await axios.post(productApi, product, {headers: {
-				"x-auth-token": localStorage.getItem("token"),
-			}},);
+	const addProduct = async (product) => {
+		try {
+			const response = await axios.post(productApi, product, {
+				headers: {
+					"x-auth-token": localStorage.getItem("token"),
+				},
+			});
 			dispatch({
 				type: "ADD_PRODUCT",
 				payload: response.data.product,
-			})
-
-		}catch(error){
-			console.log(error)
+			});
+		} catch (error) {
+			console.log(error);
 		}
 	};
 
@@ -102,5 +102,4 @@ export const ProductProvider = ({ children }) => {
 			{children}
 		</ProductContext.Provider>
 	);
-	
 };

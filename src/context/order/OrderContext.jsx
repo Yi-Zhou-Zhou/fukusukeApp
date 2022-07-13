@@ -3,11 +3,9 @@ import OrderReducer from "./OrderReducer";
 import axios from "axios";
 import { orderApi } from "../../api/Api";
 
-
 const defaultState = [];
 
 export const OrderContext = createContext(defaultState);
-
 
 export const OrderProvider = ({ children }) => {
 	const [orders, dispatch] = useReducer(OrderReducer, defaultState);
@@ -15,7 +13,6 @@ export const OrderProvider = ({ children }) => {
 	useEffect(() => {
 		const fetchProducts = async () => {
 			try {
-				
 				const response = await axios.get(`${orderApi}/`, {
 					headers: {
 						"x-auth-token": localStorage.getItem("token"),
@@ -23,14 +20,12 @@ export const OrderProvider = ({ children }) => {
 				});
 
 				setOrders(response.data);
-				console.log(response.data)
 			} catch (error) {
 				console.log(error);
 			}
 		};
 		fetchProducts();
 	}, []);
-
 
 	const setOrders = (orders) => {
 		dispatch({
@@ -39,7 +34,6 @@ export const OrderProvider = ({ children }) => {
 		});
 	};
 
-	
 	return (
 		<OrderContext.Provider
 			value={{
@@ -50,6 +44,4 @@ export const OrderProvider = ({ children }) => {
 			{children}
 		</OrderContext.Provider>
 	);
-	
 };
-

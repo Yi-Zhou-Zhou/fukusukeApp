@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link, Outlet, useLocation, useParams } from "react-router-dom";
+import { Link, Outlet, useLocation, useParams, useNavigate } from "react-router-dom";
 import styled from 'styled-components'
 import { AppShell, Image, Navbar, Header } from '@mantine/core';
+import jwt_decode from 'jwt-decode';
 
 import imgLogo from "../../images/logo.png"
 
@@ -113,12 +114,20 @@ const AppShellUserNav = ({ currentSection }) => {
 };
 
 const AdminHome = () => {
+
+    const navigate = useNavigate();
+
     const currentSection = useParams().selectedCategory
     const [currentNavbar, setCurrentNavbar] = useState(null)
 
     let loc = useLocation()
 
     useEffect(() => {
+        const user_token = localStorage.getItem('token')
+        const user_role = user_token && jwt_decode(user_token).role
+        if (user_role === "client") navigate('/catalogo')
+        else if (user_role === "cashier" || user_role === "delivery") navigate('/admin/pedidos')
+
         if(loc.pathname.split("/")[2] === "pedidos"){
             setCurrentNavbar(null)
         } else if(loc.pathname.split("/")[2] === "productos") {
@@ -126,7 +135,7 @@ const AdminHome = () => {
         } else if(loc.pathname.split("/")[2] === "usuarios") {
             setCurrentNavbar(<AppShellUserNav currentSection = { currentSection } />)
         }
-    }, [loc]);
+    }, [loc.pathname]);
 
     return(
         <AppShell

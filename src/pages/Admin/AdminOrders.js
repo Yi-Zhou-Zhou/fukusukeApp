@@ -1,5 +1,8 @@
 import React, { useState, useContext } from 'react'
 
+import { useNavigate } from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
+
 import { Grid, Group, List, Text, Title } from '@mantine/core'
 
 import styled from 'styled-components';
@@ -32,7 +35,6 @@ const AdminOrders = () => {
     const { products } = useContext(ProductContext);
     const { orders } = useContext(OrderContext);
     const { users } = useContext(UserContext);
-    console.log(orders)
 
     const [selectedOrder, setSelectedOrder] = useState(null)
     const [orderingUser, setOrderingUser] = useState(null)
@@ -45,12 +47,6 @@ const AdminOrders = () => {
         setSelectedOrder(findSelectedOrder)
         setOrderingUser(findOrderingUser)
 
-
-        console.log(orders)
-        console.log(id)
-        console.log(findSelectedOrder)
-        console.log(findOrderingUser)
-        console.log(users)
     }
 
     return(

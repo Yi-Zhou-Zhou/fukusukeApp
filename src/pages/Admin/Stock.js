@@ -8,9 +8,6 @@ import { Card, Grid } from "@mantine/core";
 import styled from "styled-components";
 import CreateMenuModal from "./CreateMenuModal";
 
-import { productApi } from "../../api/Api";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { ProductContext } from "../../context/product/ProductContext";
 
 const myCard = ({ className, children }) => {
@@ -59,7 +56,6 @@ const AddMenuButton = styled.button`
 `;
 
 const Stock = () => {
-	const navigate = useNavigate();
 
 	const { products } = useContext(ProductContext);
 
