@@ -41,6 +41,7 @@ export const ProductProvider = ({ children }) => {
 					"x-auth-token": localStorage.getItem("token"),
 				},
 			});
+
 			dispatch({
 				type: "UPDATE_PRODUCT",
 				payload: response.data.updatedProduct,
@@ -48,11 +49,6 @@ export const ProductProvider = ({ children }) => {
 		} catch (error) {
 			console.log(error);
 		}
-
-		dispatch({
-			type: "UPDATE_PRODUCT",
-			payload: product,
-		});
 	};
 
 	const deleteProduct = async (_id) => {
