@@ -16,6 +16,9 @@ function Login({ openedSignIn, setOpenedSignIn, setOpenedSignUp }) {
 		const userRole = jwt_decode(data.token).role;
 		if (userRole === "admin") navigate("./admin");
 		else if (userRole === "client") navigate("./catalogo");
+		else if (userRole === "cashier") navigate("./admin/pedidos");
+		else if (userRole === "delivery") navigate("./admin/pedidos");
+		else navigate("./");
 	};
 	const [credentials, setCredentials] = useState({});
 	const handleChange = (e) => {

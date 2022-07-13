@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link, Outlet, useLocation, useParams } from "react-router-dom";
+import { Link, Outlet, useLocation, useParams, useNavigate } from "react-router-dom";
 import styled from 'styled-components'
 import { AppShell, Image, Navbar, Header } from '@mantine/core';
+import jwt_decode from 'jwt-decode';
 
 import imgLogo from "../../images/logo.png"
 
@@ -113,6 +114,9 @@ const AppShellUserNav = ({ currentSection }) => {
 };
 
 const AdminHome = () => {
+
+    const navigate = useNavigate();
+
     const currentSection = useParams().selectedCategory
     const [currentNavbar, setCurrentNavbar] = useState(null)
 
@@ -126,6 +130,7 @@ const AdminHome = () => {
         } else if(loc.pathname.split("/")[2] === "usuarios") {
             setCurrentNavbar(<AppShellUserNav currentSection = { currentSection } />)
         }
+
     }, [loc]);
 
     return(
