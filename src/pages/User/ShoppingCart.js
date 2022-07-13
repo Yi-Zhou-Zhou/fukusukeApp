@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 
 import jwt_decode from 'jwt-decode'
 
@@ -7,9 +7,12 @@ import ShoppingCartItem from "./ShoppingCartItem"
 
 import stringifyPrice from '../../functions/common/stringifyPrice'
 import naiveGenerateId from '../../functions/common/naiveGenerateId'
+import { OrderContext } from "../../context/order/OrderContext"
+import jwt_decode from 'jwt-decode';
 
 const ShoppingCart = ({ cart, setCart, openedCart, setOpenedCart, setShowBuyNotification, orders, setOrders }) => {
     const [total, setTotal] = useState(0)
+    const { addOrder} = useContext(OrderContext);
 
     const user_token = localStorage.getItem('token')
     const user_role = user_token && jwt_decode(user_token).role
@@ -41,7 +44,38 @@ const ShoppingCart = ({ cart, setCart, openedCart, setOpenedCart, setShowBuyNoti
             client: user_id
         }
 
-        setOrders(orders.concat(cartObject))
+        //Sacamos el token, ayuda xfa
+        const user_token = localStorage.getItem('token')
+        const decode = user_token && jwt_decode(user_token)
+        const user_name = decode?.name
+        const user_address = decode?.address
+        const user_phone = decode?.phone
+                
+        //setOrders([...orders, cart])
+        //Agregamos la orden nueva 
+        let productos = []
+
+        for (let i = 0; i < cart.length; i++) {
+			const object = {
+				id: cart[i].id,
+				name: cart[i].name,
+				price: cart[i].price,
+				description: cart[i].description,
+				picture: cart[i].picture,
+				quantity: cart[i].cartQuantity,
+			}
+			productos.push(object)
+		}
+
+        const order = {
+            "price": total,
+            "productos": productos,
+            "name": user_name,
+            "address": user_address,
+            "phone": user_phone,
+            
+        } 
+        addOrder(order)
 
         setCart([])
         setOpenedCart(false)
