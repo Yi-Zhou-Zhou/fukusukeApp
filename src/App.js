@@ -30,8 +30,6 @@ import { OrderProvider } from './context/order/OrderContext';
 const App = ({ orders, users }) => {
     const [openedCart, setOpenedCart] = useState(false)
     const [cart, setCart] = useState([])
-    // No cambiar, estoy probando con esto
-    const [userOrders, setUserOrders] = useState([])
 
     return (
         <ProductProvider>
@@ -40,7 +38,7 @@ const App = ({ orders, users }) => {
                     <Router>
                         <Routes>
                         <Route path="/admin" element = { <AdminHome /> } >
-                            <Route index element = {<AdminGreeting orders = { orders } />} />
+                            <Route index element = {<AdminGreeting />} />
                             <Route path = "pedidos" element = { <AdminOrders orders = { orders } users = { users } /> } />
                             <Route path = "productos" element = { <Stock /> } >
                                 <Route path=":selectedCategory" element = { <Stock /> } />
@@ -52,8 +50,8 @@ const App = ({ orders, users }) => {
 
                         <Route path="/" element={<Home openedCart = { openedCart } setOpenedCart = { setOpenedCart }/>} >
                             <Route index element = { <Greeting/> } />
-                            <Route path = "catalogo" element = { <Catalog cart = { cart } setCart = { setCart } openedCart = { openedCart } setOpenedCart = { setOpenedCart } orders = {userOrders} setOrders = { setUserOrders } /> } />
-                            <Route path = "pedidos" element = { <Orders orders = { userOrders } /> } />
+                            <Route path = "catalogo" element = { <Catalog cart = { cart } setCart = { setCart } openedCart = { openedCart } setOpenedCart = { setOpenedCart } /> } />
+                            <Route path = "pedidos" element = { <Orders /> } />
                         </Route>
 
                         </Routes>
