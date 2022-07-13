@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import AddItemNotification from "./AddItemNotification";
 import BuyNotification from "./BuyNotification"
@@ -8,8 +8,17 @@ import ShoppingCart from "../User/ShoppingCart";
 import { ProductContext } from "../../context/product/ProductContext";
 import { Container, Grid } from "@mantine/core";
 
-const Catalog = ({ cart, setCart, openedCart, setOpenedCart, orders, setOrders }) => {
+const Catalog = ({ cart, setCart, openedCart, setOpenedCart }) => {
     const { products } = useContext(ProductContext);
+
+    const [initialProducts, setInitialProducts] = useState([])
+
+    useEffect(() => {
+        if(products.length !== 0)
+        {
+            setInitialProducts(products)
+        }
+    }, [products])
 
     const [showAddNotification, setShowAddNotification] = useState(false)
     const [notificationMessage, setNotificationMessage] = useState(null)
@@ -32,18 +41,17 @@ const Catalog = ({ cart, setCart, openedCart, setOpenedCart, orders, setOrders }
                 openedCart = { openedCart }
                 setOpenedCart = { setOpenedCart }
                 setShowBuyNotification = { setShowBuyNotification }
-                orders = { orders }
-                setOrders = { setOrders }
             />
 
             <Grid>
             {
-                products.map(product => 
+                initialProducts.map(product => 
                     <CatalogItem
                         key = { product._id }
                         cart = { cart }
                         setCart = { setCart }
                         product = { product }
+                        setProducts = { setInitialProducts }
                         setShowAddNotification = { setShowAddNotification }
                         setNotificationMessage = { setNotificationMessage }
                         quantityOnCart = { getQuantityOnCart(product._id) }
