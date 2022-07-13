@@ -27,6 +27,19 @@ export const OrderProvider = ({ children }) => {
 		fetchProducts();
 	}, []);
 
+	const addOrder = async (order) => {
+		console.log(order)
+		try {
+			const response = await axios.post(orderApi, order);
+			dispatch({
+				type: "ADD_ORDER",
+				payload: response.data.product,
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	const setOrders = (orders) => {
 		dispatch({
 			type: "SET_ORDERS",
@@ -34,11 +47,14 @@ export const OrderProvider = ({ children }) => {
 		});
 	};
 
+
+
 	return (
 		<OrderContext.Provider
 			value={{
 				orders,
 				setOrders,
+				addOrder,
 			}}
 		>
 			{children}

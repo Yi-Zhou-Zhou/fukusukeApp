@@ -9,8 +9,6 @@ import { AiOutlineArrowRight } from 'react-icons/ai'
 import stringifyPrice from '../../functions/common/stringifyPrice'
 
 const Orders = ({ orders }) => {
-    console.log(orders)
-
     if(orders.length !== 0)
     {
         return(
@@ -36,6 +34,7 @@ const Orders = ({ orders }) => {
                     {
                         orders.map(order => 
                             <div
+                                key = { order.id }
                                 style = {{
                                     width: '640px',
                                     alignSelf: 'center'
@@ -46,7 +45,7 @@ const Orders = ({ orders }) => {
                                     p = "lg"
                                 >
                                 {
-                                    order.map(product =>
+                                    order.productos.map(product =>
                                         <Group
                                             key = { product._id }
                                             direction = "column"
