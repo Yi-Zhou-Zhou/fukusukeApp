@@ -4,6 +4,13 @@ export const OrderReducer = (state, action) => {
 			return action.payload;
 		case "ADD_ORDER":
 			return [...state, action.payload];
+		case "UPDATE_ORDER":
+			return state.map((order) => {
+				if (order._id === action.payload._id) {
+					return action.payload;
+				}
+				return order;
+			});
 		default:
 			return state;
 	}
