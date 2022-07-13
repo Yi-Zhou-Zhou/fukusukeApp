@@ -123,6 +123,11 @@ const AdminHome = () => {
     let loc = useLocation()
 
     useEffect(() => {
+        const user_token = localStorage.getItem('token')
+        const user_role = user_token && jwt_decode(user_token).role
+        if (user_role === "client") navigate('/catalogo')
+        else if (user_role === "cashier" || user_role === "delivery") navigate('/admin/pedidos')
+
         if(loc.pathname.split("/")[2] === "pedidos"){
             setCurrentNavbar(null)
         } else if(loc.pathname.split("/")[2] === "productos") {
@@ -130,8 +135,7 @@ const AdminHome = () => {
         } else if(loc.pathname.split("/")[2] === "usuarios") {
             setCurrentNavbar(<AppShellUserNav currentSection = { currentSection } />)
         }
-
-    }, [loc]);
+    }, [loc.pathname]);
 
     return(
         <AppShell
