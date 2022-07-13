@@ -155,7 +155,7 @@ const UsersTable = ({ users, handleEdit, handleDelete }) => {
 					{headerGroups.map((headerGroup) => (
 						<tr {...headerGroup.getHeaderGroupProps()}>
 							{headerGroup.headers.map((column) => (
-								<th>
+								<th key={column.id}>
 									<div
 										{...column.getHeaderProps(
 											column.getSortByToggleProps()
