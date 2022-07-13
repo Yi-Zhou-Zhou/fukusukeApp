@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react'
 
 import { useNavigate } from 'react-router-dom';
-import jwt_decode from 'jwt-decode';
 
 import { Grid, Group, List, Text, Title } from '@mantine/core'
 
