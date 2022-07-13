@@ -1,26 +1,36 @@
 import React from "react";
 
-import { Card, Group, Text, Title } from "@mantine/core";
+import { Card, Container, Image, Text, Title } from "@mantine/core";
+
+import styled from 'styled-components'
+
+const MediaScroller = styled.div`
+    display: grid;
+    grid-auto-flow: column;
+`
 
 const AdminGreeting = ({ orders }) => {
     return(
-        <Group direction = "column">
+        <Container>
             <Title order = { 2 } > Ordenes recientes: </Title>
 
-            <Group>
+            <MediaScroller>
             {
                 orders.map(order => 
-                    <Card key = { order.id }> 
+                    <Card key = { order.id }>
+                        <Card.Section>
+                            {/* <Image src = { order. } */}
+                        </Card.Section>
                         <Text>
                             {order.id}
                         </Text>
                     </Card>
                 )
             }
-            </Group>
+            </MediaScroller>
 
             <Title order = { 2 } > Productos sin stock: </Title> 
-        </Group>
+        </Container>
     )
 }
 

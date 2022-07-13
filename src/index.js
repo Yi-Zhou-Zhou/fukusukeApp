@@ -29,21 +29,21 @@ const orders = [
     id: 1,
     orderedBy: 1,
     orderDate: "2022/06/14 10:00:00",
-    content: ["62c4f0989f423e3c21ba35ca", "62c4f0f69f423e3c21ba35cb"],
+    content: ["62cdd4a4227a3d50d00eed8d", "62cdd724348a80c4273877b5"],
     deliveryAddress: "Avenida Francia, Valparaíso",
   },
   {
     id: 2,
     orderedBy: 2,
     orderDate: "2022/06/14 10:04:32",
-    content: ["62c4f0989f423e3c21ba35ca"],
+    content: ["62cdd724348a80c4273877b5"],
     deliveryAddress: "Pedro Montt, Valparaíso"
   },
   {
     id: 3,
     orderedBy: 3,
     orderDate: "2022/06/14 10:06:17",
-    content: ["62c4f0989f423e3c21ba35ca", "62c4f0f69f423e3c21ba35cb"],
+    content: ["62cdd7fb348a80c4273877c3", "62cddaec348a80c4273877cc"],
     deliveryAddress: "Avenida Francia, Valparaíso"
   },
 ]

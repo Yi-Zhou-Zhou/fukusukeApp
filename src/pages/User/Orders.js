@@ -9,6 +9,8 @@ import { AiOutlineArrowRight } from 'react-icons/ai'
 import stringifyPrice from '../../functions/common/stringifyPrice'
 
 const Orders = ({ orders }) => {
+    console.log(orders)
+
     if(orders.length !== 0)
     {
         return(
