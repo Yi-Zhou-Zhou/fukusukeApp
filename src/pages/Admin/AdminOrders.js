@@ -64,6 +64,9 @@ const AdminOrders = () => {
 
     const handleSelectOrder = ( id ) => {
         const findSelectedOrder = orders.find(order => order._id === id)
+
+        console.log(findSelectedOrder)
+
         const findOrderingUser = users.find(user => user._id === findSelectedOrder.client.id)
 
         setSelectedOrder(findSelectedOrder)
@@ -124,14 +127,14 @@ const AdminOrders = () => {
                                 <Title order = { 2 } style = {{ fontSize: '2rem' }}> Dirección de Entrega </Title>
 
                                 <List style = {{ fontSize: '1.125rem' }}>
-                                    <List.Item> { selectedOrder.client.address } </List.Item>
+                                    <List.Item>{ selectedOrder.client.address }</List.Item>
                                 </List>
 
                                 <Title order = { 2 } style = {{ fontSize: '2rem' }} > Detalles del Cliente </Title>
 
                                 <List style = {{ fontSize: '1.125rem' }}>
-                                    <List.Item> { orderingUser.name } </List.Item>
-                                    <List.Item> +56{orderingUser.phone} </List.Item>
+                                    <List.Item>{ selectedOrder.client.name }</List.Item>
+                                    <List.Item>+56{ orderingUser?.phone }</List.Item>
                                 </List>
 
                                 <Button

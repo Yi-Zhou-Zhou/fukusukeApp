@@ -57,8 +57,6 @@ const Order = ({ handleSelectOrder, order }) => {
                 <StyledExpandButton />
             </ExpandButton>
 
-            <Text style = {{position: 'absolute', top: '1.3rem', left: '1rem'}}> #X </Text>
-
             <Text style = {{ fontSize: '1.5rem' }}> Realizado a las: { onlyTime(order.createdAt) } </Text>
             <Text style = {{ fontSize: '1.5rem' }}> Entrega estimada: { addWaitingTime(order.createdAt, 1) } </Text>
             <Text style = {{ fontSize: '1.5rem' }}> Precio: { stringifyPrice(order.price) } </Text>

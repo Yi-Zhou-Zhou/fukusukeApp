@@ -25,7 +25,7 @@ export const UserProvider = ({ children }) => {
 
 		const user_token = localStorage.getItem("token");
 		const user_role = user_token && jwt_decode(user_token).role;
-		if (user_role === "admin") fetchUsers();
+		if (user_role !== "client") fetchUsers();
 	}, []);
 
 	const [users, dispatch] = useReducer(UserReducer, defaultState);
